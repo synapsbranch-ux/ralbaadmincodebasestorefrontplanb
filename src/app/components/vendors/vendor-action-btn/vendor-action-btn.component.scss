@@ -1,0 +1,26 @@
+.btn {
+    color: #fff;
+}
+
+.btn.btn-sm {
+    padding: 0.2rem;
+    font-size: 10px;
+    line-height: 14px;
+    text-decoration: none;
+}
+
+span {
+    margin: .3rem;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: capitalize;
+    font-size: 11px;
+}
+
+.display-none {
+    display: none !important;
+}
+
+.label {
+    border-radius: 6px;
+}

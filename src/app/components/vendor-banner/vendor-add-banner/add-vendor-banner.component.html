@@ -1,0 +1,145 @@
+<div class="container-fluid">
+    <form [formGroup]="bannerSubmitForm" (ngSubmit)="onBannerSubmit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0">Banner Heading</label>
+                                <input class="form-control" id="validationCustom01" type="text"
+                                    formControlName="banner_heading"
+                                    (keydown)="handleEnter($event, 'validationCustom02')">
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom02" class="col-form-label pt-0">Banner Sub Heading</label>
+                                <input class="form-control" id="validationCustom02" type="text"
+                                    formControlName="banner_sub_heading"
+                                    (keydown)="handleEnter($event, 'validationCustom03')">
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom03" class="col-form-label pt-0">Banner Heading Color</label>
+                                <input class="form-control" id="validationCustom03" type="color"
+                                    formControlName="banner_heading_color"
+                                    (keydown)="handleEnter($event, 'validationCustom04')">
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom04" class="col-form-label pt-0">Banner Sub Heading
+                                    Color</label>
+                                <input class="form-control" id="validationCustom04" type="color"
+                                    formControlName="banner_sub_heading_color"
+                                    (keydown)="handleEnter($event, 'validationCustom05')">
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom05" class="col-form-label pt-0">Banner Button Background
+                                    Color</label>
+                                <input class="form-control" id="validationCustom05" type="color"
+                                    formControlName="banner_button_bg_color"
+                                    (keydown)="handleEnter($event, 'validationCustom06')">
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom06" class="col-form-label pt-0">Banner Button Text
+                                    Color</label>
+                                <input class="form-control" id="validationCustom06" type="color"
+                                    formControlName="banner_button_text_color"
+                                    (keydown)="handleEnter($event, 'catagories_name')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="sub_catagories_name" class="col-form-label"><span>*</span> Main Menu
+                                    Categories</label>
+                                <ng-select [clearSearchOnAdd]="true" formControlName="sub_catagories_name"
+                                    placeholder="Select Menu categories" [items]="allSubCategoriesLists"
+                                    bindLabel="category_name" [multiple]="true" [closeOnSelect]="false"></ng-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sub_catagories_name" class="col-form-label"><span>*</span> Top
+                                    Brands (Featured Brands)</label>
+                                <ng-select formControlName="brand_List" [items]="brandList" bindLabel="brand_name"
+                                    [multiple]="true" [closeOnSelect]="false" placeholder="Select Top Brands"
+                                    id="brand_List">
+                                </ng-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sub_catagories_name" class="col-form-label"><span>*</span> Home Page
+                                    Brands</label>
+                                <ng-select formControlName="home_brand_List" [items]="brandList" bindLabel="brand_name"
+                                    [multiple]="true" [closeOnSelect]="false" placeholder="Select Home Page Brands"
+                                    id="home_brand_List">
+                                </ng-select>
+                            </div>
+
+
+                            <label class="col-form-label pt-0"><span>*</span> Banner Background Image Upload (jpg, jpeg,
+                                png)</label>
+                            <span class="pl-2">
+                                <a href="javascrip:void(0)" (click)="open(content)">Upload guidelines</a>
+                            </span>
+
+                            <div class="card-body dropzone-custom p-0">
+                                <div class="dropzone dropzone-primary" [dropzone]="config" (addedFile)="onFileAdded($event)">
+                                    <div class="dz-message needsclick">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="store-images mt-3">
+                                <p *ngIf="banner_background_image_name">Banner Image Name : <span
+                                        class="text-success">{{banner_background_image_name}}</span></p>
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" [disabled]="bannerSubmitForm.invalid"
+                                        class="btn btn-primary mr-1">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+
+
+                            <div [className]="bannerinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'"
+                                role="alert" *ngIf="bannerinsertValid || bannerinsertinValid">
+                                <div class="d-flex align-items-center justify-content-center">{{bannerinsertMessage}}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>image must be uploaded below 3MB </h4>
+        <h3>Image Height : 1920px and Image Width : 720px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

@@ -1,0 +1,47 @@
+.room-image {
+  opacity: 0.8;
+  width: 85px;
+  height: 85px;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: gray;
+  display: inline-block;
+  margin: 10px;
+}
+
+.room-image:hover {
+  opacity: 1;
+}
+
+.roomside-img>input {
+  display: none;
+}
+
+.roomside-img>.room-image {
+  cursor: pointer;
+  border: 2px solid black;
+}
+
+.roomside-img>input:checked+.room-image {
+  border: 2px solid orange;
+  opacity: 1;
+}
+
+.logo_file {
+  width: 30%;
+  height: 150px;
+  object-fit: contain;
+}
+
+.modal-header {
+  justify-content: space-between;
+}
+
+.close_modal {
+  border: solid 1px;
+  margin-bottom: 14px;
+}
+.mr-2{
+  margin-right: 5px;
+}

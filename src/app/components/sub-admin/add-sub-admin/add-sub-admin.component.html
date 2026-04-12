@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <form [formGroup]="subadminSubmitForm" (ngSubmit)="onSubadminSubmit()">
+        <div class="row subadmin-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="subadmin-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span>Name</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" formControlName="subadmin_name" (keydown)="handleEnter($event, 'validationCustom02')"> 
+
+                                <div *ngIf="subadmin_name.invalid && (subadmin_name.dirty || subadmin_name.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_name.errors?.required">
+                                        Sub-admin name is required.
+                                    </div>
+                                    <div *ngIf="subadmin_name.errors?.pattern">
+                                        Name Only Contain Letter with space
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom02" class="col-form-label pt-0"><span>*</span>Email</label>
+                                <input class="form-control" id="validationCustom02" type="text" required="" formControlName="subadmin_email" (keydown)="handleEnter($event, 'validationCustom03')">
+                                <div *ngIf="subadmin_email.invalid && (subadmin_email.dirty || subadmin_email.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_email.errors?.required">
+                                        Email is required.
+                                    </div>
+                                    <div *ngIf="subadmin_email.errors?.email || subadmin_email.errors?.pattern">
+                                    Please enter a valid email.
+                                </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom03" class="col-form-label pt-0"><span>*</span>Password</label>
+                                <input class="form-control" id="validationCustom03"  type="password" required="" formControlName="subadmin_password" (keydown)="handleEnter($event, 'validationCustom05')">
+                                <div *ngIf="subadmin_password.invalid && (subadmin_password.dirty || subadmin_password.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_password.errors?.required">
+                                        Password is required.
+                                    </div>
+                                    <div *ngIf="subadmin_password.errors?.minlength">
+                                        Password will be minimum 8 character.
+                                    </div>
+                                    <div *ngIf="subadmin_password.errors?.maxlength">
+                                        Password will be miximum 15 character.
+                                    </div>
+                                    <div class="text-danger" class="error-text" *ngIf="subadmin_password.hasError('passwordStrength')">
+                                        {{subadmin_password.errors['passwordStrength']}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom05" class="col-form-label pt-0"><span>*</span> Repeat Password</label>
+                                <input class="form-control" id="validationCustom05"  type="password" required="" formControlName="subadmin_repeat_password" (keydown)="handleEnter($event)">
+                             <div *ngIf="subadmin_repeat_password.invalid && (subadmin_repeat_password.dirty || subadmin_repeat_password.touched) && subadmin_repeat_password.errors" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_repeat_password.errors?.required">
+                                        Confirm password required..
+                                    </div>
+                                    <div *ngIf="subadmin_repeat_password.errors.matching">Passwords do not match</div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit"  class="btn btn-primary mr-1" type="submit">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+
+                            <div [className]="subadmininsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="subadmininsertValid">
+                                <div class="d-flex align-items-center justify-content-center">{{subadmininsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

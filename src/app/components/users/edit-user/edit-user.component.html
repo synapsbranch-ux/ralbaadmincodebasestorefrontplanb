@@ -1,0 +1,69 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+                    <form [formGroup]="userEditForm" class="needs-validation user-add" novalidate (ngSubmit)="onUserEditFormSubmit()">
+                        <div class="form-group">
+                            <label for="validationCustom0" class="col-form-label pt-0"><span>*</span>Name</label>
+                            <input class="form-control" id="validationCustom0" type="text" ngModel="{{uName}}" formControlName="user_name" (keydown)="handleEnter($event, 'validationCustom1')">
+                            <div *ngIf="user_name.invalid && (user_name.dirty || user_name.touched)" class="text text-danger mt-1">
+                                <div *ngIf="user_name.errors?.required">
+                                    User name is required.
+                                </div>
+                                <div *ngIf="user_name.errors?.pattern">
+                                    Name Only Contain Letter with space
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="validationCustom1" class="col-form-label pt-0"><span>*</span> Phone Number</label>
+                           
+                                <input class="form-control" id="validationCustom1" type="text" ngModel="{{uPhone}}" formControlName="user_phone"  (keydown)="handleEnter($event, 'validationCustom2')">
+                                <div *ngIf="user_phone.invalid && (user_phone.dirty || user_phone.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="user_phone.errors?.required">
+                                        Phone Number is required.
+                                    </div>
+                                    <div *ngIf="user_phone.errors?.pattern">
+                                        Only number is allowed.
+                                    </div>
+                                    <div *ngIf="user_phone.errors?.maxlength">
+                                        Phone number only allow 12 digits.
+                                    </div>
+                                </div>
+                           
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom2" class="col-form-label pt-0"><span>*</span>
+                        Email</label>
+                    
+                                <input class="form-control" id="validationCustom2" type="email" ngModel="{{uEmail}}" formControlName="user_email" (keydown)="handleEnter($event)">
+                                <div *ngIf="user_email.invalid && (user_email.dirty || user_email.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="user_email.errors?.required">
+                                        Email is required.
+                                    </div>
+                                    <div *ngIf="user_email.errors?.email || user_email.errors?.pattern">
+                                    Please enter a valid email.
+                                </div>
+                                </div>
+                            
+                        </div>
+
+                        <div class="pull-left position-relative">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+
+                        <div [className]="isValid ? 'alert mt-6 alert-success' : 'alert mt-6 alert-danger'" role="alert" *ngIf="isValid || !phValid">
+                            {{signupMassage}}
+                        </div>
+                    </form>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

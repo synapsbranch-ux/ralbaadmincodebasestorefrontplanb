@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <form [formGroup]="departmentSubmitForm" (ngSubmit)="onDepartmentSubmit()">
+        <div class="row department-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="department-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Department Name</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" formControlName="department_name">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Store Name</label>
+                                <select class="form-control" required="" formControlName="store_name">
+                    <option value="" selected>--Select--</option>
+                    <option *ngFor="let store of storeLists" [value]="store._id">{{store.store_name}}</option>
+                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span>ELement List</label>
+                                <select class="form-control" required="" formControlName="element_name">
+                        <option value="" selected>--Select--</option>
+                        <option *ngFor="let element of elementList" [value]="element._id">{{element.roomelement_name}}</option>
+                    </select>
+                                <p class="text-danger pt-2">NOTE : If you don’t find required elements you can still upload your product by selecting any available element. Our admin will check and get back to you</p>
+                            </div>
+
+                            <label class="col-form-label pt-0"> Department Image Upload (jpg, jpeg, png)</label>
+                            <span class="pl-2">
+                    <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                </span>
+                            <div class="card-body dropzone-custom p-0">
+                                <div class="dropzone dropzone-primary" [dropzone]="config" (addedFile)="onFileAdded($event)" (removedFile)="onDelete($event)">
+                                    <div class="dz-message needsclick">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" [disabled]="departmentSubmitForm.invalid" class="btn btn-primary mr-1" type="submit">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+
+                            <div [className]="departrmentinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="departrmentinsertValid || departrmentinsertimgValid">
+                                <div class="d-flex align-items-center justify-content-center">{{departrmentinsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>Image must be upload under 5MB </h4>
+        <h3>Image Height : 400px and Width : 400px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

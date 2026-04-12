@@ -1,0 +1,121 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="mat-elevation-z8">
+
+            <input class="form-control search mb-2" (keyup)="applyFilter($event)" placeholder="Search" />
+
+            <table mat-table [dataSource]="dataSource" cdkDropList (cdkDropListDropped)="drop($event)" class="w-100">
+
+              <!-- Section Image -->
+              <ng-container matColumnDef="section_image">
+                <th mat-header-cell *matHeaderCellDef>Section Image</th>
+                <td mat-cell *matCellDef="let element">
+                  <img [src]="element.section_image || 'assets/images/cat3.png'" width="100" />
+                </td>
+              </ng-container>
+
+              <!-- Heading -->
+              <ng-container matColumnDef="heading_text">
+                <th mat-header-cell *matHeaderCellDef>Heading Name</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.heading_text }}
+                </td>
+              </ng-container>
+
+              <!-- Web View Status -->
+              <ng-container matColumnDef="web_view_status">
+                <th mat-header-cell *matHeaderCellDef>Web View Status</th>
+                <td mat-cell *matCellDef="let element" [style.cursor]="vendorType === 'access' ? 'text' : 'pointer'">
+                  <span [class]="
+                      element.web_view_status === 'active'
+                        ? 'label label-success'
+                        : 'label label-danger'
+                    " (click)="webstatusChange(element)">
+                    {{ element.web_view_status }}
+                  </span>
+                </td>
+              </ng-container>
+
+
+              <!-- Status -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">
+                  <span [class]="
+                      element.status === 'active'
+                        ? 'label label-success'
+                        : 'label label-danger'
+                    ">
+                    {{ element.status }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- Actions -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button (click)="edit(element)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button *ngIf="userrole==='admin'" (click)="delete(element)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <!-- Header & Rows -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+              <tr mat-row *matRowDef="
+                  let row;
+                  columns: displayedColumns;
+                  trackBy: trackById
+                " cdkDrag></tr>
+            </table>
+
+            <mat-paginator [length]="totalMediaTexts" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+              (page)="onPageChange($event)" showFirstLastButtons>
+            </mat-paginator>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog template -->
+
+    <ng-template #mediaTextContentDelete>
+      <div class="modal-content warning_popup ">
+        <h3 class="modal-title text-center"><span>WARNING!</span></h3>
+        <div class="warning_msg">
+          <div class="modal-header">
+            <button type="button" class="close_modal">
+              <img src="assets/images/close.webp" width="24" alt="" [mat-dialog-close]="true">
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="text-center">
+
+              <p>Are you sure you want to delete this "MEDIA CONTENT"? It will delete all data related to this
+                "MEDIA CONTENT". Be careful!</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="d-flex">
+              <button [mat-dialog-close]="true" (click)="deleteConfirm()" class="btn btn-danger">Yes</button>
+              <button [mat-dialog-close]="true" class="btn btn-sucess">No</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </ng-template>
+
+
+
+  </div>
+</div>

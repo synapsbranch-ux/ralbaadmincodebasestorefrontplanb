@@ -1,0 +1,101 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Platform Products - Displayer / Fulfiller</h5>
+                    <p class="text-muted mb-0">Manage which products you display or fulfill from the entire platform</p>
+                </div>
+                <div class="card-body">
+                    <!-- Loading -->
+                    <div *ngIf="isLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div *ngIf="!isLoading" class="table-responsive">
+                        <table class="table table-hover table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Owner</th>
+                                    <th>Retail Price</th>
+                                    <th>Displayer</th>
+                                    <th>Fulfiller</th>
+                                    <th>My Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of products" [class.table-warning]="p.df_pending">
+                                    <td>
+                                        <strong>{{ p.product_name }}</strong>
+                                        <span *ngIf="p.is_owner" class="badge bg-info ms-1">Owner</span>
+                                    </td>
+                                    <td>{{ p.product_owner?.name || 'N/A' }}</td>
+                                    <td>{{ p.product_sale_price || p.product_retail_price | currency:'USD' }}</td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox"
+                                                   [checked]="p.vendor_displayer_status !== 'none'"
+                                                   [disabled]="savingProductId === p._id"
+                                                   (change)="toggleDisplayer(p)">
+                                        </div>
+                                        <span [ngClass]="getStatusBadge(p.vendor_displayer_status)">
+                                            {{ p.vendor_displayer_status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox"
+                                                   [checked]="p.vendor_fulfiller_status !== 'none'"
+                                                   [disabled]="savingProductId === p._id"
+                                                   (change)="toggleFulfiller(p)">
+                                        </div>
+                                        <span [ngClass]="getStatusBadge(p.vendor_fulfiller_status)">
+                                            {{ p.vendor_fulfiller_status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control form-control-sm"
+                                               style="width: 100px;"
+                                               [(ngModel)]="p.vendor_sales_price"
+                                               [disabled]="p.is_owner || savingProductId === p._id"
+                                               placeholder="Price"
+                                               (blur)="p.vendor_sales_price ? saveVendorPrice(p) : null">
+                                    </td>
+                                    <td>
+                                        <span *ngIf="p.df_pending" class="badge bg-warning text-dark">
+                                            Pending Approval
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="products.length === 0">
+                                    <td colspan="7" class="text-center text-muted">No products found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div *ngIf="totalPages > 1" class="d-flex justify-content-between align-items-center mt-3">
+                        <small class="text-muted">{{ totalCount }} products total</small>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item" [class.disabled]="currentPage === 1">
+                                    <a class="page-link" (click)="changePage(currentPage - 1)">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <span class="page-link">{{ currentPage }} / {{ totalPages }}</span>
+                                </li>
+                                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                                    <a class="page-link" (click)="changePage(currentPage + 1)">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

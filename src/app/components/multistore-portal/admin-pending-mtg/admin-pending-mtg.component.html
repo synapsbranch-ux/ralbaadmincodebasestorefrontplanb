@@ -1,0 +1,58 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Pending MTG Approvals</h5>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="isLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <div *ngIf="!isLoading" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Heading</th>
+                                    <th>Description</th>
+                                    <th>Vendor</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let mtg of pendingMTGs">
+                                    <td>
+                                        <img [src]="mtg.section_image" alt="" *ngIf="mtg.section_image"
+                                             style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px;">
+                                    </td>
+                                    <td>{{ mtg.heading_text }}</td>
+                                    <td>{{ mtg.description_text | slice:0:60 }}...</td>
+                                    <td>{{ mtg.vendor_id?.name || 'N/A' }}</td>
+                                    <td>{{ mtg.createdAt | date:'shortDate' }}</td>
+                                    <td>
+                                        <button class="btn btn-success btn-sm me-1"
+                                                [disabled]="processingId === mtg._id"
+                                                (click)="approveMTG(mtg)">
+                                            Approve
+                                        </button>
+                                        <button class="btn btn-danger btn-sm"
+                                                [disabled]="processingId === mtg._id"
+                                                (click)="rejectMTG(mtg)">
+                                            Reject
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pendingMTGs.length === 0">
+                                    <td colspan="6" class="text-center text-muted py-3">No pending MTGs</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

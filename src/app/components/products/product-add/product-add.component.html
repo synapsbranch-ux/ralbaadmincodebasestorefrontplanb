@@ -1,0 +1,495 @@
+<div class="container-fluid">
+    <form [formGroup]="productSubmitForm" (ngSubmit)="onProductSubmit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>General</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="prd_1" class="col-form-label pt-0"><span>*</span> Title</label>
+                                <input class="form-control" id="prd_1" type="text" required=""
+                                    formControlName="product_name" (keydown)="handleEnter($event, 'prd_2')">
+                            </div>
+                            <div class="form-group">
+                                <label for="prd_2" class="col-form-label pt-0"><span>*</span> SKU
+                                    Id</label>
+                                <input class="form-control pb-2" id="prd_2" type="text" name="productsku" required=""
+                                    formControlName="product_sku" #productsku (keydown)="handleEnter($event, 'prd_3')">
+                                <p *ngIf="skuvaluecount == 0" class="text-success ">SKU Available</p>
+                                <p *ngIf="skuvaluecount > 0" class="text-danger">SKU Not Available</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="prd_3" class="col-form-label pt-0"> Product Background Color Code</label>
+                                <input class="form-control" id="prd_3" type="color" required=""
+                                    formControlName="product_bg_color" (keydown)="handleEnter($event, 'prd_4')">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label" for="prd_4"><span>*</span> Categories</label>
+                                <ng-select [clearSearchOnAdd]="true" formControlName="catagories_name"
+                                    bindLabel="category_name" (change)="getchild(selectedCategory)" [clearable]="false"
+                                    [items]="allCatagoriesLists" [(ngModel)]="selectedCategory" id="prd_4"
+                                    (keydown)="handleEnter($event, 'prd_5')"></ng-select>
+                                <p class="text-danger pt-2">NOTE : If you don’t find required category, you can still
+                                    upload your product by selecting any available category. Our admin will check and
+                                    get back to you</p>
+                            </div>
+
+                            <div class="form-group">
+                                <div #contentSubCategories></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label" for="prd_5"><span>*</span> Brand</label>
+                                <ng-select [clearSearchOnAdd]="true" formControlName="brand_name" bindLabel="brand_name"
+                                    [clearable]="false" [items]="allBrandList" [(ngModel)]="selectedBrand" id="prd_5"
+                                    (keydown)="handleEnter($event, 'prd_6')">
+                                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                                        <img *ngIf="item.brand_image" height="25" width="25" [src]="item.brand_image" />
+                                        <b>&nbsp;&nbsp;{{item.brand_name}}</b>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="sub_catagories_name" class="col-form-label"><span>*</span> Tags</label>
+                                <ng-select formControlName="tag_List" [items]="tagList" bindLabel="tag_name"
+                                    [multiple]="true" [closeOnSelect]="false" placeholder="Select tags" id="tag_List">
+                                </ng-select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="prd_6" class="col-form-label"><span>*</span> Product Price</label>
+                                <input class="form-control" id="prd_6" type="number" min="0" required=""
+                                    formControlName="product_price" (keydown)="handleEnter($event, 'prd_7')">
+                            </div>
+                            <div class="form-group">
+                                <label for="prd_7" class="col-form-label"> Sale Price</label>
+                                <input class="form-control" id="prd_7" type="number" min="0"
+                                    formControlName="sale_price" #productsale (keydown)="handleEnter($event, 'prd_8')">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" *ngIf="attributejsonData">
+                    <div class="card-header">
+                        <h5>Product Attribute</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div *ngFor="let item of attributejsonData; index as k">
+                                <div class="form-group">
+                                    <label class="col-form-label" for="prd_{{firstStaticFieldLastIndex + (k+1)}}"> <span
+                                            *ngIf="item.is_mandatory">*</span> {{
+                                        item.attribute_name }}</label>
+                                    <ng-container [ngSwitch]="item.attribute_input">
+                                        <!-- {{firstStaticFieldLastIndex + k + 2 }} -->
+                                        <input class="form-control" *ngSwitchCase="'input'" type="text"
+                                            id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')">
+                                        <input class="form-control" *ngSwitchCase="'range'" type="range"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')">
+                                        <input class="form-control" *ngSwitchCase="'file'" type="file"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            accept=".pdf,image/png, image/jpg, image/jpeg"
+                                            (change)="uploadFiles($event.target.files,getFormControlName(item.attribute_name+'_attribute'))"
+                                            id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')">
+                                        <textarea class="form-control" *ngSwitchCase="'textarea'"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')"></textarea>
+                                        <select class="form-select" *ngSwitchCase="'select'"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')">
+                                            <option *ngFor="let option of item.attribute_value" [value]="option.values">
+                                                {{ option.values }}</option>
+                                        </select>
+                                        <select class="form-select" *ngSwitchCase="'multiselect'"
+                                            [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                            multiple id="prd_{{firstStaticFieldLastIndex + (k+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + 2 }}')">
+                                            <option *ngFor="let option of item.attribute_value" [value]="option.values">
+                                                {{ option.values }}</option>
+                                        </select>
+
+                                        <div class="radiobutton-sec" *ngSwitchCase="'radio'">
+                                            <div *ngFor="let option of item.attribute_value; let i = index">
+                                                <label class="col-form-label" for="{{item.attribute_name}}radio{{i}}">
+                                                    <input id="{{item.attribute_name}}radio{{i}}"
+                                                        name="{{getFormControlName(item.attribute_name+'_attribute')}}"
+                                                        type="radio" [value]="option.values"
+                                                        [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                                        id="pid_{{firstStaticFieldLastIndex + (k+i+1)}}"
+                                                        (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + i + 2 }}')" />
+                                                    {{option.values}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="checkbox-sec" *ngSwitchCase="'checkbox'">
+                                            <div *ngFor="let option of item.attribute_value; let i = index">
+                                                <label class="col-form-label" for="{{item.attribute_name}}check{{i}}">
+                                                    <input id="{{item.attribute_name}}check{{i}}"
+                                                        name="{{getFormControlName(item.attribute_name+'_attribute')}}"
+                                                        type="checkbox" [value]="option.values"
+                                                        [formControlName]="getFormControlName(item.attribute_name+'_attribute')"
+                                                        id="pid_{{firstStaticFieldLastIndex + (k+i+1)}}"
+                                                        (keydown)="handleEnter($event, 'prd_{{firstStaticFieldLastIndex + k + i + 2 }}')" />
+                                                    {{option.values}}</label>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- {{firstStaticFieldLastIndex}} -->
+
+                <div class="card" *ngIf="addonsjsonData">
+                    <div class="card-header">
+                        <h5>Products Optionals</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <div class="m-checkbox-inline mb-0 custom-checkbox-ml d-flex checkbox-animated">
+                                    <label class="d-block" for="prd_8">
+                                        <input class="checkbox_animated" type="checkbox"
+                                            formControlName="is_addons_required" [(ngModel)]="AddonService" id="prd_8"
+                                            (keydown)="handleEnter($event, 'prd_9')">
+                                        Product Addons ??
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="m-checkbox-inline mb-0 custom-checkbox-ml d-flex checkbox-animated">
+                                    <label class="d-block" for="prd_9">
+                                        <input class="checkbox_animated" id="prd_9" type="checkbox"
+                                            formControlName="is_custom_addons" [(ngModel)]="customAddonService"
+                                            (keydown)="handleEnter($event, 'prd_10')">
+                                        Custom Addons ??
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" *ngIf="addonsjsonData && customAddonService">
+                    <div class="card-header">
+                        <h5>Product Add Ons</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div *ngFor="let item of addonsjsonData; index as i">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold"
+                                        for="prd_{{addOnStartIndex + i + 1 }}"> <span *ngIf="item.is_mandatory">*</span>
+                                        {{ item.add_ons_name }}</label>
+                                    <ng-container [ngSwitch]="item.add_ons_input">
+                                        <input class="form-control" *ngSwitchCase="'input'" type="text" disabled>
+                                        <input class="form-control" *ngSwitchCase="'input'" type="text"
+                                            [formControlName]="getFormControlName(item.add_ons_name+'_addons')"
+                                            placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+
+                                        <input class="form-control" *ngSwitchCase="'range-input'" type="range" disabled>
+                                        <input class="form-control" *ngSwitchCase="'range-input'" type="text"
+                                            [formControlName]="getFormControlName(item.add_ons_name+'_addons')"
+                                            placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+
+                                        <input class="form-control" *ngSwitchCase="'range'" type="range" disabled>
+                                        <input class="form-control" *ngSwitchCase="'range'" type="text"
+                                            [formControlName]="getFormControlName(item.add_ons_name+'_addons')"
+                                            placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+
+
+                                        <input class="form-control" *ngSwitchCase="'file'" type="text"
+                                            [formControlName]="getFormControlName(item.add_ons_name+'_addons')"
+                                            placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+
+                                        <textarea class="form-control" *ngSwitchCase="'textarea'" disabled></textarea>
+                                        <input class="form-control" *ngSwitchCase="'textarea'" type="text"
+                                            [formControlName]="getFormControlName(item.add_ons_name+'_addons')"
+                                            placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                            (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+
+
+                                        <div class="selectvalues-sec" *ngSwitchCase="'select'">
+                                            <div *ngFor="let option of item.add_ons_value; let i = index">
+                                                <label class="col-form-label">{{ option.values }} Price</label>
+                                                <input class="form-control" type="text"
+                                                    [formControlName]="getFormControlName(item.add_ons_name+'-'+option.values+'_addons')"
+                                                    placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                                    (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+                                            </div>
+                                        </div>
+
+                                        <div class="selectvalues-sec" *ngSwitchCase="'radio'">
+                                            <div *ngFor="let option of item.add_ons_value; let i = index">
+                                                <label class="col-form-label">{{ option.values }} Price</label>
+                                                <input class="form-control" type="text"
+                                                    [formControlName]="getFormControlName(item.add_ons_name+'-'+option.values+'_addons')"
+                                                    placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}"
+                                                    (keydown)="handleEnter($event, 'prd_{{addOnStartIndex + (i+2)}}')">
+                                            </div>
+                                        </div>
+
+                                        <div class="selectvalues-sec" *ngSwitchCase="'checkbox'">
+                                            <div *ngFor="let option of item.add_ons_value; let i = index">
+                                                <label class="col-form-label">{{ option.values }} Price</label>
+                                                <input class="form-control" type="text"
+                                                    [formControlName]="getFormControlName(item.add_ons_name+'-'+option.values+'_addons')"
+                                                    placeholder="ex:100" id="pid_{{addOnStartIndex + (i+1)}}">
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card pb-4">
+                    <div class="card-header">
+                        <h5>Product Image Section</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="gbl_img" class="col-form-label"> Upload 3D Object (GLB File)</label>
+
+                                <span class="pl-2">
+                                    <a href="javascrip:void(0)" (click)="opengbl(content2)">Upload guidelines</a>
+                                </span>
+
+                                <input class="form-control" id="gbl_img" type="file" accept=".glb"
+                                    (change)="processFile($event.target.files)">
+                                <br />
+                                <p *ngIf="upload3DImageStatus == 'uploading'" class="text-danger">Glb Uploading ....
+                                </p>
+                                <p *ngIf="upload3DImageStatus == 'uploaded'" class="text-success">Glb Upload
+                                    successfully
+                                </p>
+                                <a *ngIf="vendor_type !='access' && upload3DImage.length > 0"
+                                    (click)="deleteProductImage(productglb_name,'threed')">X</a>
+                                <model-viewer *ngIf="upload3DImage.length > 0" class="model-viewer" camera-controls
+                                    camera-orbit="75deg 75deg 20m" src="{{upload3DImage[0].fileurl}}"
+                                    alt="A 3D model Product" data-js-focus-visible="" ar-status="not-presenting">
+                                </model-viewer>
+                                <a *ngIf="!isAdmin" class="btn btn-primary" [class.disabled]="requestButton"
+                                    (click)="request3DAsset()">Request for 3D Asset</a>
+                            </div>
+                            <!-- <div class="form-group">
+                        <label class="col-form-label"><span>*</span> Status</label>
+                        <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                            <label class="d-block" for="edo-ani">
+                                <input class="radio_animated" id="edo-ani" type="radio" name="rdo-ani">
+                                Enable
+                            </label>
+                            <label class="d-block" for="edo-ani1">
+                                <input class="radio_animated" id="edo-ani1" type="radio" name="rdo-ani">
+                                Disable
+                            </label>
+                        </div>
+                    </div> -->
+                            <label class="col-form-label pt-0"> Product Image Upload
+                                (jpeg, jpg, png)</label>
+
+                            <span class="pl-2">
+                                <a href="javascrip:void(0)" (click)="open(content)">Upload guidelines</a>
+                            </span>
+                            <p *ngIf="uploadImageStatus == 'uploaded'" class="py-2">File name : {{productglb_name}}</p>
+                            <p *ngIf="uploadImageStatus == 'uploading'" class="text-danger">Image Uploading .... </p>
+                            <p *ngIf="uploadImageStatus == 'uploaded'" class="text-success">Image Upload successfully
+                            </p>
+
+                            <div class="card-body dropzone-custom p-0">
+                                <div class="dropzone dropzone-primary" [dropzone]="config"
+                                    (addedFile)="onFileAdded($event)"
+                                    (removedFile)="onDelete($event)">
+                                    <div class="dz-message needsclick">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="draganddrop">
+                                <div cdkDropList class="products-list" (cdkDropListDropped)="drop($event)">
+                                    <div class="example-box" *ngFor="let img of imagelist" cdkDrag>
+                                        <a *ngIf="vendor_type !='access'"
+                                            (click)="deleteProductImage(img.image_name,'prodimage')">X</a>{{img.image_name}}
+                                        <a href="{{img.pro_image}}" target="_blank"><img [src]="img.pro_image"
+                                                width="50px"></a>
+                                        <img class="prod_img" *cdkDragPreview [src]="img.pro_image"
+                                            alt="{{img.image_name}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card pb-4">
+                    <div class="card-header">
+                        <h5><span class="text-red">*</span> Add Description <span style="font-size: small;">(Product
+                                Description is Madnatory)</span></h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group mb-3">
+                                <div class="description-md">
+                                    <textarea rows="4" cols="12" formControlName="product_desc" id="prd_10"
+                                        (keydown)="handleEnter($event, 'prd_11')"></textarea>
+                                    <!-- <ck-editor id="editor1" language="en" [fullPage]="false"></ck-editor> -->
+                                    <!-- <div *ngIf="productSubmitForm.get('product_desc')" required="" class="text text-danger mt-1">
+                                        Product Description is Required
+                                      </div> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="m-checkbox-inline mb-0 custom-checkbox-ml d-flex checkbox-animated">
+                                    <label class="d-block" for="prd_11">
+                                        <input class="checkbox_animated" id="prd_11" value="active" type="checkbox"
+                                            formControlName="product_3dservice"
+                                            (keydown)="handleEnter($event, 'prd_12')">
+                                        Request 3D Content Generation Services
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="external_link" class="col-form-label">External Link</label>
+                                <input class="form-control" id="external_link" type="text"
+                                    formControlName="external_link" id="prd_12"
+                                    (keydown)="handleEnter($event, 'prd_13')">
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Product Availability</label>
+                                <div class="m-checkbox-inline mb-0 custom-radio-ml d-flex radio-animated">
+                                    <label class="d-block">
+                                        <input class="radio_animated" value="YES" type="radio"
+                                            formControlName="product_availability" id="prd_13"
+                                            (keydown)="handleEnter($event, 'prd_14')">
+                                        Available
+                                    </label>
+                                    <label class="d-block">
+                                        <input class="radio_animated" value="NO" type="radio"
+                                            formControlName="product_availability" id="prd_14"
+                                            (keydown)="handleEnter($event, 'prd_15')">
+                                        Not available
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="stock" class="col-form-label"><span>*</span> Product Stock</label>
+                                <small class="text-danger d-block">Stock should > 0, Ex- 1</small>
+                                <input class="form-control" id="stock" type="number" min="1" step="1"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57" required=""
+                                    formControlName="stock" id="prd_15" (keydown)="handleEnter($event)">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="metaTags" class="col-form-label">Product Meta Data (SEO)</label>
+                                <small class="text-danger d-block">Type tag and press Enter or Comma</small>
+                                <div class="border p-2 rounded d-flex flex-wrap">
+                                    <!-- Tags Preview -->
+                                    <span *ngFor="let tag of metaTags; let i = index"
+                                        class="badge bg-primary me-1 mb-1">
+                                        {{ tag }}
+                                        <button type="button" class="btn-close btn-close-white btn-sm ms-1"
+                                            aria-label="Remove" (click)="removeTag(i)"></button>
+                                    </span>
+
+                                    <!-- Tag Input -->
+                                    <input type="text" id="metaTags" class="border-0 flex-grow-1"
+                                        placeholder="Type tag and press Enter or Comma" formControlName="metaTagInput"
+                                        (keydown)="onTagKeydown($event)">
+                                </div>
+
+                                <!-- Hidden field to store final comma-separated value -->
+                                <input type="hidden" formControlName="product_meta_tags">
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-0">
+                        <div class="product-buttons text-center">
+                            <button type="button" [disabled]="productSubmitForm.invalid && skuvaluecount > 0"
+                                class="btn btn-primary mr-1" type="submit">Add</button>
+                            <button type="reset" class="btn btn-light">Discard</button>
+                        </div>
+                    </div>
+
+                    <div [className]="productinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'"
+                        role="alert" *ngIf="productinsertValid || productinsertError">
+                        <div class="d-flex align-items-center justify-content-center">{{productinsertMessage}}</div>
+                    </div>
+                </div>
+                <!-- <div class="card">
+            <div class="card-header">
+                <h5>Meta Data</h5>
+            </div>
+            <div class="card-body">
+                <div class="digital-add needs-validation">
+                    <div class="form-group">
+                        <label for="validationCustom05" class="col-form-label pt-0"> Meta Title</label>
+                        <input class="form-control" id="validationCustom05" type="text" required="">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Meta Description</label>
+                        <textarea rows="4" cols="12"></textarea>
+                    </div>
+
+                </div>
+            </div>
+        </div> -->
+            </div>
+        </div>
+    </form>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>Image must be upload under 5MB </h4>
+        <h3>Image Height : 400px and Width : 400px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>
+
+<ng-template #content2 let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">3D Object upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Object type:</b> <span class="text-lowercase"> .glb </span> </h4>
+        <h4>Object must be upload under 20MB </h4>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

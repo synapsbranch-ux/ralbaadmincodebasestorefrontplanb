@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+                    <form [formGroup]="returnDurationForm" class="needs-validation user-add" novalidate (ngSubmit)="onReturnDurationFormSubmit()">
+                        <div class="form-group">
+                            <label for="validationCustom0" class="col-form-label pt-0"><span>*</span> Return Duration (Days)</label>
+                            <input class="form-control" id="validationCustom0" [ngModel]="return_duration_value" type="text" required="" formControlName="return_duration" maxlength="3" >
+                            <div *ngIf="return_duration.invalid && (return_duration.dirty || return_duration.touched)" class="text text-danger mt-1">
+                                <div *ngIf="return_duration.errors?.required">Return Duration is required.</div>
+                                <div *ngIf="return_duration.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="return_duration.errors?.maxlength">only allow 3 digits.</div>
+                            </div>
+                        </div>
+                        <div class="pull-left position-relative">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+.edit,
+.delete {
+  cursor: pointer;
+}
+
+.img-addons a img {
+  max-width: 50px;
+  height: auto;
+}
+
+.order_detail,
+.payment-mode {
+  h4 {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+
+  p {
+    margin-bottom: 15px;
+  }
+}
+.back_btn img{
+  width: 35px;
+  cursor: pointer;
+}

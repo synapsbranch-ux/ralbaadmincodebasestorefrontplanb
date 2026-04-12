@@ -1,0 +1,47 @@
+<div class="container-fluid">
+    <form [formGroup]="imageistSubmitForm" (ngSubmit)="onImageinstEdit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span>Image Guidline</label>
+                                <textarea class="form-control" formControlName="img_instruction" ngModel="{{image_instruction}}"></textarea>
+
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Image Size</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" ngModel="{{image_size}}" formControlName="img_size">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Image Width</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" ngModel="{{image_width}}" formControlName="img_width">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Image Height</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" ngModel="{{image_height}}" formControlName="img_height">
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="button" class="btn btn-primary mr-1" type="submit">Update</button>
+                                </div>
+                            </div>
+
+                            <div [className]="imageinstinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="imageinstinsertValid">
+                                <div class="d-flex align-items-center justify-content-center">{{imageinstinsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+</div>

@@ -1,0 +1,76 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Order Lists</h5>
+        </div>
+        <div class="card-body order-list-table">
+          <div class="mat-elevation-z8">
+            <div>
+              <input class="form-control search" (keyup)="applyFilter($event)" placeholder="Search">
+            </div>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <ng-container matColumnDef="_id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Order id </th>
+                <td mat-cell *matCellDef="let element"> {{element._id}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="product_image">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Product</th>
+                <td mat-cell *matCellDef="let element"><img src="{{element.product_image}}" alt="" width="100px"> </td>
+              </ng-container>
+
+              <ng-container matColumnDef="payment_status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Payment status</th>
+                <td mat-cell *matCellDef="let element"> <span [ngClass]="(element.payment_status == 'COMPLETED' || element.payment_status == 'APPROVED')  ? 'badge badge-success' : 'badge badge-warning'" >{{element.payment_status | uppercase}}</span></td>
+              </ng-container>
+
+              <ng-container matColumnDef="payment_method">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Paymeny method </th>
+                <td mat-cell *matCellDef="let element"> {{element.payment_method}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="order_status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Order status</th>
+                <td mat-cell *matCellDef="let element"><span [ngClass]="element.order_status == 'accepted' ? 'badge badge-success' : 'badge badge-warning'" >{{element.order_status  | uppercase}}</span> </td>
+              </ng-container>
+
+              <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Order Date</th>
+                <td mat-cell *matCellDef="let element"> {{element.createdAt  |  date:'mediumDate'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="total_order_amount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Total</th>
+                <td mat-cell *matCellDef="let element"> {{element.total_order_amount}} </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                  <a class="btn btn-sm btn-primary mr-2" (click)="view(element)" matTooltip="View Order">
+                    View
+                  </a>
+                  <a class="btn btn-sm btn-primary btn-small" (click)="statuschange(element)"
+                    matTooltip="Order Status Change">
+                    Status Change
+                  </a>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [length]="totalOrder" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]"
+            (page)="onPageChange($event)" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

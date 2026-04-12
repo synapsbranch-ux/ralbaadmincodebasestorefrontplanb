@@ -1,0 +1,116 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Order Payment Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div *ngIf="paymentId" class="container py-4">
+                                <!-- Transaction Info Section -->
+                                <div class="card mb-3">
+                                  <div class="card-header bg-primary text-white">
+                                    Transaction Information
+                                  </div>
+                                  <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                      <li *ngIf="paymentId?.transaction_id && paymentId?.transaction_id !== '0'" class="list-group-item">
+                                        Transaction ID: {{ paymentId?.transaction_id }}
+                                      </li>
+                                      <li *ngIf="paymentId?.country_code" class="list-group-item">Country Code: {{ paymentId?.country_code }}</li>
+                                      <li *ngIf="paymentId?.email_address" class="list-group-item">Email Address: {{ paymentId?.email_address }}</li>
+                                      <li *ngIf="paymentId?.name" class="list-group-item">Name: {{ paymentId?.name }}</li>
+                                      <li *ngIf="paymentId?.customer_id_paypal" class="list-group-item">Customer ID (PayPal): {{ paymentId?.customer_id_paypal }}</li>
+                                      <li *ngIf="paymentId?.paypal_status" class="list-group-item">PayPal Status: {{ paymentId?.paypal_status }}</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              
+                                <!-- PayPal Data Section (Checking if available) -->
+                                <div *ngIf="paymentId?.paypal_data" class="card mb-3">
+                                  <div class="card-header bg-success text-white">
+                                    PayPal Details
+                                  </div>
+                                  <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                      <li *ngIf="paymentId?.paypal_data?.id" class="list-group-item">PayPal Transaction ID: {{ paymentId?.paypal_data?.id }}</li>
+                                      <li *ngIf="paymentId?.paypal_data?.intent" class="list-group-item">Intent: {{ paymentId?.paypal_data?.intent }}</li>
+                                      <li *ngIf="paymentId?.paypal_data?.status" class="list-group-item">Status: {{ paymentId?.paypal_data?.status }}</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              
+                                <!-- Purchase Units Section -->
+                                <div *ngIf="paymentId?.paypal_data?.purchase_units?.length > 0" class="card mb-3">
+                                  <div class="card-header bg-info text-white">
+                                    Purchase Units
+                                  </div>
+                                  <div class="card-body">
+                                    <div *ngFor="let unit of paymentId?.paypal_data?.purchase_units">
+                                      <ul class="list-group list-group-flush">
+                                        <li *ngIf="unit?.reference_id" class="list-group-item">Reference ID: {{ unit?.reference_id }}</li>
+                                        <li *ngIf="unit?.amount?.value && unit?.amount?.currency_code" class="list-group-item">
+                                          Amount: {{ unit?.amount?.value }} {{ unit?.amount?.currency_code }}
+                                        </li>
+                                        <li *ngIf="unit?.payee?.email_address" class="list-group-item">Payee Email: {{ unit?.payee?.email_address }}</li>
+                              
+                                        <!-- Shipping Info -->
+                                        <div *ngIf="unit?.shipping" class="card mb-2">
+                                          <div class="card-header bg-secondary text-white">
+                                            Shipping Info
+                                          </div>
+                                          <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                              <li *ngIf="unit?.shipping?.name?.full_name" class="list-group-item">Name: {{ unit?.shipping?.name?.full_name }}</li>
+                                              <li *ngIf="unit?.shipping?.address?.address_line_1" class="list-group-item">
+                                                Address: {{ unit?.shipping?.address?.address_line_1 }}, {{ unit?.shipping?.address?.admin_area_2 }},
+                                                {{ unit?.shipping?.address?.admin_area_1 }} {{ unit?.shipping?.address?.postal_code }}, {{ unit?.shipping?.address?.country_code }}
+                                              </li>
+                                            </ul>
+                                          </div>
+                                        </div>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              
+                                <!-- Payer Info Section -->
+                                <div *ngIf="paymentId?.paypal_data?.payer" class="card mb-3">
+                                  <div class="card-header bg-warning text-white">
+                                    Payer Information
+                                  </div>
+                                  <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                      <li *ngIf="paymentId?.paypal_data?.payer?.name?.given_name && paymentId?.paypal_data?.payer?.name?.surname" class="list-group-item">
+                                        Payer Name: {{ paymentId?.paypal_data?.payer?.name?.given_name }} {{ paymentId?.paypal_data?.payer?.name?.surname }}
+                                      </li>
+                                      <li *ngIf="paymentId?.paypal_data?.payer?.email_address" class="list-group-item">Payer Email: {{ paymentId?.paypal_data?.payer?.email_address }}</li>
+                                      <li *ngIf="paymentId?.paypal_data?.payer?.payer_id" class="list-group-item">Payer ID: {{ paymentId?.paypal_data?.payer?.payer_id }}</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              
+                                <!-- Created At Section -->
+                                <div class="card mb-3">
+                                  <div class="card-header bg-dark text-white">
+                                    Created At
+                                  </div>
+                                  <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                      <li *ngIf="paymentId?.createdAt" class="list-group-item">Created At: {{ paymentId?.createdAt | date:'medium' }}</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

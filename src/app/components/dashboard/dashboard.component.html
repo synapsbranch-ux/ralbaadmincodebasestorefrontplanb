@@ -1,0 +1,126 @@
+<div class="container-fluid" *ngIf="dashboardaccess">
+    <form [formGroup]="DashboardFilterForm" (ngSubmit)="onDashboardSubmit()">
+        <div class="row product-adding">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="form-group col-md-2" *ngIf="isAdmin">
+                                <label for="validationCustom01" class="col-form-label pt-0">Select Vendor</label>
+                                <select class="form-select" formControlName="vendor_id">
+                                    <option value="">--Select--</option>
+                                    <option *ngFor="let vendor of vendorslist" [value]="vendor._id">{{vendor.name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- <div class="form-group col-md-2">
+                                <label for="validationCustom01" class="col-form-label pt-0">From Date</label>
+                                <input type="date" class="form-control" id="from_date" max="{{today | date: 'yyyy-MM-dd'}}" (change)="fromdate($event)" formControlName="from_date">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="validationCustom01" class="col-form-label pt-0">To Date</label>
+                                <input type="date" class="form-control" value="{{today_max_coditional | date: 'yyyy-MM-dd'}}" formControlName="to_date" id="to_date" [attr.disabled]="!todate_status ? 'disabled' : null" min="{{today_max_coditional | date: 'yyyy-MM-dd'}}" max="{{today | date: 'yyyy-MM-dd'}}">
+                            </div> -->
+                            <div class="form-group col-md-2">
+                                <label for="validationCustom01" class="col-form-label pt-0">From Date</label>
+                                <div class="d-flex">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="from_d"
+                                        ngbDatepicker #d="ngbDatepicker" formControlName="from_date"
+                                        [maxDate]="todays" (ngModelChange)="fromdate($event)" />
+                                    <button class="btn btn-sm p-0" (click)="d.toggle()" type="button">
+                                        <app-feather-icons [icon]="'calendar'"
+                                            class="font-secondary"></app-feather-icons>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <label for="validationCustom01" class="col-form-label pt-0">To Date</label>
+                                <div class="d-flex">
+                                    <input class="form-control" placeholder="yyyy-mm-dd" name="dp" [(ngModel)]="to_d"
+                                        ngbDatepicker #d1="ngbDatepicker" formControlName="to_date" id="to_date" [minDate]="today_max_coditional"
+                                        [maxDate]="todays"
+                                        [markDisabled]="!todate_status" />
+                                    <button class="btn btn-sm p-0" (click)="d1.toggle()" [disabled]="!todate_status"
+                                        type="button">
+                                        <app-feather-icons [icon]="'calendar'"
+                                            class="font-secondary"></app-feather-icons>
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group mb-0 mt-4 col-md-3">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" [disabled]="DashboardFilterForm.invalid"
+                                        class="btn btn-primary mr-3">Filter</button>
+                                    <button type="reset" (click)="reset()" class="btn btn-light">Reset</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-xl-4 col-md-6 xl-50">
+            <div class="card o-hidden widget-cards">
+                <div class="bg-danger card-body">
+                    <div class="media static-top-widget row">
+                        <div class="icons-widgets col-3">
+                            <div class="align-self-center text-center">
+                                <app-feather-icons [icon]="'dollar-sign'" class="font-danger"></app-feather-icons>
+                            </div>
+                        </div>
+                        <div class="media-body col-9"><span class="m-0">No of Purchased Transactions</span>
+                            <h3 class="mb-0"> <span class="counter" [countUp]="total_parchase">{{total_parchase}}</span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-md-6 xl-50">
+            <div class="card o-hidden  widget-cards">
+                <div class="bg-secondary card-body">
+                    <div class="media static-top-widget row">
+                        <div class="icons-widgets col-3">
+                            <div class="align-self-center text-center">
+                                <app-feather-icons [icon]="'shopping-bag'" class="font-secondary"></app-feather-icons>
+                            </div>
+                        </div>
+                        <div class="media-body col-9"><span class="m-0">No of Products</span>
+                            <h3 class="mb-0"> <span class="counter"
+                                    [countUp]="number_of_product">{{number_of_product}}</span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-4 col-md-6 xl-50">
+            <div class="card o-hidden widget-cards">
+                <div class="bg-warning card-body">
+                    <div class="media static-top-widget row">
+                        <div class="icons-widgets col-3">
+                            <div class="align-self-center text-center">
+                                <app-feather-icons [icon]="'truck'" class="font-warning"></app-feather-icons>
+                            </div>
+                        </div>
+                        <div class="media-body col-9"><span class="m-0">Total Value of Purchases</span>
+                            <h3 class="mb-0">$ <span class="counter"
+                                    [countUp]="total_order_amount">{{total_order_amount}}</span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!dashboardaccess" class="text-center m-auto">
+    <h4>you are not authorized to access dashboard Details</h4>
+</div>
+<!-- Container-fluid Ends-->

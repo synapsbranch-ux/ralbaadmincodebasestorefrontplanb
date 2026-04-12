@@ -1,0 +1,32 @@
+.store-images img{
+  max-width: 150px;
+  width: 100%;
+}
+
+/* Larger and more visible Website View switch (consistent with add-tag) */
+.form-check.form-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#flexSwitchCheckChecked.form-check-input[role='switch'] {
+  transform: scale(1.35);
+  transform-origin: left center;
+  cursor: pointer;
+}
+
+#flexSwitchCheckChecked.form-check-input[role='switch']:focus {
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 13, 110, 253), 0.25);
+}
+
+#flexSwitchCheckChecked.form-check-input[role='switch']:checked {
+  background-color: var(--bs-primary, #0d6efd);
+  border-color: var(--bs-primary, #0d6efd);
+}
+
+label.form-check-label[for='flexSwitchCheckChecked'] {
+  margin-left: 0.25rem;
+  font-weight: 500;
+  padding-top: 3px;
+}

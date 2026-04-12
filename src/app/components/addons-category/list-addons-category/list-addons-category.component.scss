@@ -1,0 +1,25 @@
+.edit,
+.delete {
+    cursor: pointer;
+}
+
+.store-img {
+    max-width: 35px;
+    max-height: 35px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.edit {
+    padding-right: 1rem !important;
+}
+
+.close_modal {
+    right: 0;
+    position: absolute;
+    background: transparent;
+    border: none;
+    top: 1%;
+}

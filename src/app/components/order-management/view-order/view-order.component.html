@@ -1,0 +1,409 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body" *ngIf="isAdmin || vendorType !=='access' ">
+                    <div class="back_btn">
+                        <!-- <a *ngIf="!this.isAdmin" routerLink="/order/order-list"><img src="assets/images/back.png"
+                                alt=""></a>
+                        <a *ngIf="this.isAdmin"
+                            routerLink="{{currentVendor ? '/vendors/vendor-order-list/'+currentVendor:'/users/user-order-list/'+currentUser}}"><img
+                                src="assets/images/back.png" alt=""></a> -->
+                        <a (click)="goBack()"><img src="assets/images/back.png" alt=""></a>
+                    </div>
+                    <div class="card-header">
+                        <h5>Order Details</h5>
+                    </div>
+                    <div>
+                        <div class="mb-3">
+                            <label for="uploadPres" class="form-label">Upload Prescription</label>
+                            <!-- (change)="uploadFiles($event.target.files, getFormControlName(addon.add_ons_name), addon)" -->
+                            <!-- <input class="form-control form-control-sm w-25" type="file" id="uploadPres" (change)="onFileSelected($event)"> -->
+                            <div style="display:flex">
+                                <input class="form-control w-25 me-2" type="file" id="uploadPres">
+                                <button type="button" class="btn btn-primary" (click)="uploadPrescription()">Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 table-responsive">
+                            <table class="w-100">
+                                <tr class="text-center">
+                                    <th class="pb-3">Product Image</th>
+                                    <th class="pb-3">Product Name</th>
+                                    <th class="pb-3">Quantity</th>
+                                    <th class="pb-3">Product Price</th>
+                                    <th class="pb-3">Addons Price</th>
+                                    <th class="pb-3">Platform Charge</th>
+                                    <th class="pb-3">Access Vendor Earning</th>
+                                    <th class="pb-3">Access vendor earning for 3D Assets</th>
+                                    <th class="pb-3">Main Vendor Store</th>
+                                    <th class="pb-3">Access Vendor Store</th>
+                                    <th class="pb-3">Total Commission</th>
+                                    <th class="pb-3">Final Price</th>
+                                </tr>
+                                <tr *ngFor="let product of oderProducts" class="text-center">
+                                    <td class="pb-3">
+                                        <img height="50" [src]="product.product_image" [alt]="product.product_name">
+                                    </td>
+                                    <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                        {{ product.product_name | titlecase }} || {{
+                                        findProductDetails(product.product_id)?.attributes[0]?.value }}
+                                    </td>
+                                    <td
+                                        *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                        {{ product.product_name | titlecase }}
+                                    </td>
+                                    <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                        Left Eye : {{ product.left_eye_qty }} | Right Eye : {{ product.right_eye_qty }}
+                                    </td>
+                                    <td
+                                        *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                        {{ product.qty }}
+                                    </td>
+                                    <td>
+                                        {{ product.price | currency }}
+                                    </td>
+                                    <td>
+                                        {{ (product.addonsprice ? product.addonsprice : 0) | currency }}
+                                        <p *ngIf="product.addons.length > 0">
+                                            <a class="pe-auto"
+                                                (click)="viewAddonsDetails(product.addons,addonsDetails)">View
+                                                Addons</a>
+                                        </p>
+                                    </td>
+                                    <!-- Platform Charge -->
+                                    <td>
+                                        {{getCommissionCharge(product, 'Platform Charge').price | currency}} |
+                                        {{getCommissionCharge(product, 'Platform Charge').percentage}}%
+                                    </td>
+                                    <!-- Copy Product Charge (Safe check) -->
+                                    <td>
+                                        {{getCommissionCharge(product, 'Copy Product').price | currency}} |
+                                        {{getCommissionCharge(product, 'Copy Product').percentage}}%
+                                    </td>
+                                    <!-- 3D Assets Charge (Safe check) -->
+                                    <td>
+                                        {{getCommissionCharge(product, '3D Asset').price | currency}} |
+                                        {{getCommissionCharge(product, '3D Asset').percentage}}%
+                                    </td>
+                                    <!-- Main Vendor Store -->
+                                    <td>
+                                        <a href="https://ralbatech.com/vendor/{{getStoreName(product,'main').store_slug}}"
+                                            target="_blank">{{getStoreName(product,'main').store_name}}</a>
+                                    </td>
+
+                                    <!-- Access Vendor Store -->
+                                    <td>
+                                        <a href="https://ralbatech.com/vendor/{{getStoreName(product,'access').store_slug}}"
+                                            target="_blank">{{getStoreName(product,'access').store_name}}</a>
+                                    </td>
+                                    <!-- Total Commission (Safe check) -->
+                                    <td>
+                                        {{ product.commission_details?.[0]?.commissionPrice | currency }}
+                                    </td>
+                                    <!-- Final Price (Net Price, Safe check) -->
+                                    <td>
+                                        {{ product.commission_details?.[0]?.netPrice | currency }}
+                                    </td>
+                                </tr>
+                                <tfoot class="table">
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Subtotal:</strong>
+                                            {{ total_order_amount - (tax_percentage_value +
+                                            shipping_charge_value) + discount | currency }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right text-success"><strong>Discount:</strong>
+                                            -{{discount | currency}} <span *ngIf="couponName">({{couponName}})</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Tax Amount:</strong>
+                                            {{tax_percentage_value | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Shipping Charge:</strong>
+                                            {{shipping_charge_value | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Total:</strong>
+                                            {{total_order_amount | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Order Status:</strong> {{
+                                            order_status | uppercase }}
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        *ngIf="order_status == 'return requested' || order_status == 'return approved' || order_status == 'return in transit' || order_status == 'return received' || order_status == 'refunded'">
+                                        <td colspan="5" class="text-right"><strong>Return Reason:</strong>
+                                            {{ return_reason }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-12 p-30">
+                            <div class="row order-success-sec">
+                                <div class="col-sm-4 mb-3">
+                                    <h4 class="m-0 text-black">Summary</h4>
+                                    <hr>
+                                    <ul class="order-detail">
+                                        <li>order ID: {{order_id}}</li>
+                                        <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
+                                        <li>Order Total: {{total_order_amount | currency}}</li>
+                                    </ul>
+                                    <div class="delivery"
+                                        *ngIf="payment_status != 'APPROVED' || payment_status !='COMPLETED'">
+                                        <div class="delivery-sec pt-3">
+                                            <h4>expected date of delivery</h4>
+                                            <h3 class="text-black">{{expected_delivery | date:'MMMM d, y'}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <h4 class="m-0 text-black">shipping address</h4>
+                                    <hr>
+                                    <ul class="order-detail">
+                                        <li>{{orderAddress?.user_full_name}}</li>
+                                        <li>{{orderAddress?.addressline1}}</li>
+                                        <li>{{orderAddress?.addressline2}}</li>
+                                        <li>{{orderAddress?.city}}</li>
+                                        <li>{{orderAddress?.state}} - {{orderAddress?.postal_code}}</li>
+                                        <li>Contact No. {{orderAddress?.mobile}}</li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-sm-4 payment-mode mb-3">
+                                    <h4 class="m-0 text-black">payment method</h4>
+                                    <hr>
+                                    <p class="text-black">{{payment_method}}</p>
+                                    <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery
+                                        (COD) available. Card/Net banking acceptance subject to device availability.</p>
+                                    <p>Payment Status : <span
+                                            *ngIf="payment_status != 'APPROVED'&& payment_status !='COMPLETED'"
+                                            class="text-warning">{{payment_status | uppercase}}</span><span
+                                            *ngIf="payment_status == 'APPROVED' || payment_status =='COMPLETED'"
+                                            class="text-success">{{payment_status | uppercase}}</span></p>
+                                    <button class="btn btn-sm btn-primary" (click)="paymentDetails()">View Payment
+                                        Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body" *ngIf="!isAdmin && vendorType ==='access' ">
+                    <div class="back_btn">
+                        <!-- <a *ngIf="!this.isAdmin" routerLink="/order/order-list"><img src="assets/images/back.png"
+                                alt=""></a>
+                        <a *ngIf="this.isAdmin"
+                            routerLink="{{currentVendor ? '/vendors/vendor-order-list/'+currentVendor:'/users/user-order-list/'+currentUser}}"><img
+                                src="assets/images/back.png" alt=""></a> -->
+                        <a (click)="goBack()"><img src="assets/images/back.png" alt=""></a>
+                    </div>
+                    <div class="card-header">
+                        <h5>Order Details</h5>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 table-responsive">
+                            <table class="w-100">
+                                <tr class="text-center">
+                                    <th class="pb-3">Product Image</th>
+                                    <th class="pb-3">Product Name</th>
+                                    <th class="pb-3">Quantity</th>
+                                    <th class="pb-3">Product Price</th>
+                                    <th class="pb-3">Addons Price</th>
+                                    <th class="pb-3">Access Vendor Earning</th>
+                                    <th class="pb-3">Access vendor earning for 3D Assets</th>
+                                    <th class="pb-3">Main Vendor Store</th>
+                                </tr>
+                                <tr *ngFor="let product of oderProducts" class="text-center">
+                                    <td class="pb-3">
+                                        <img height="50" [src]="product.product_image" [alt]="product.product_name">
+                                    </td>
+                                    <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                        {{ product.product_name | titlecase }} || {{
+                                        findProductDetails(product.product_id)?.attributes[0]?.value }}
+                                    </td>
+                                    <td
+                                        *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                        {{ product.product_name | titlecase }}
+                                    </td>
+                                    <td *ngIf="product.left_eye_qty > 0 || product.right_eye_qty > 0">
+                                        Left Eye : {{ product.left_eye_qty }} | Right Eye : {{ product.right_eye_qty }}
+                                    </td>
+                                    <td
+                                        *ngIf="(product.left_eye_qty === undefined || product.left_eye_qty === 0) && (product.right_eye_qty === undefined || product.right_eye_qty === 0)">
+                                        {{ product.qty }}
+                                    </td>
+                                    <td>
+                                        {{ product.price | currency }}
+                                    </td>
+                                    <td>
+                                        {{ (product.addonsprice ? product.addonsprice : 0) | currency }}
+                                        <p *ngIf="product.addons.length > 0">
+                                            <a class="pe-auto"
+                                                (click)="viewAddonsDetails(product.addons,addonsDetails)">View
+                                                Addons</a>
+                                        </p>
+                                    </td>
+                                    <!-- Copy Product Charge (Safe check) -->
+                                    <td>
+                                        {{getCommissionCharge(product, 'Copy Product').price | currency}} |
+                                        {{getCommissionCharge(product, 'Copy Product').percentage}}%
+                                    </td>
+                                    <!-- 3D Assets Charge (Safe check) -->
+                                    <td>
+                                        {{getCommissionCharge(product, '3D Asset').price | currency}} |
+                                        {{getCommissionCharge(product, '3D Asset').percentage}}%
+                                    </td>
+                                    <td>
+                                        <a href="https://ralbatech.com/vendor/{{getStoreName(product,'main').store_slug}}"
+                                            target="_blank">{{getStoreName(product,'main').store_name}}</a>
+                                    </td>
+                                </tr>
+                                <tfoot class="table">
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Subtotal:</strong>
+                                            {{ total_order_amount - (tax_percentage_value +
+                                            shipping_charge_value) + discount | currency }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Tax Amount:</strong>
+                                            {{tax_percentage_value | currency}}
+                                            <small>** This may vary. It is calculated based on the total cart
+                                                value.</small>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Shipping Charge:</strong>
+                                            {{shipping_charge_value | currency}}
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right text-success"><strong>Discount:</strong>
+                                            -{{discount | currency}} ({{couponName}})</td> 
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Total:</strong>
+                                            {{total_order_amount | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right"><strong>Order Status:</strong> {{
+                                            order_status | uppercase }}
+                                        </td>
+                                    </tr>
+                                    <tr
+                                        *ngIf="order_status == 'return requested' || order_status == 'return approved' || order_status == 'return in transit' || order_status == 'return received' || order_status == 'refunded'">
+                                        <td colspan="5" class="text-right"><strong>Return Reason:</strong>
+                                            {{ return_reason }}
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-12 p-30">
+                            <div class="row order-success-sec">
+                                <div class="col-sm-4 mb-3">
+                                    <h4 class="m-0 text-black">Summary</h4>
+                                    <hr>
+                                    <ul class="order-detail">
+                                        <li>order ID: {{order_id}}</li>
+                                        <li>Order Date: {{ createdAt | date:'MMMM d, y'}}</li>
+                                        <li>Order Total: {{total_order_amount | currency}}</li>
+                                    </ul>
+                                    <div class="delivery"
+                                        *ngIf="payment_status != 'APPROVED' || payment_status !='COMPLETED'">
+                                        <div class="delivery-sec pt-3">
+                                            <h4>expected date of delivery</h4>
+                                            <h3 class="text-black">{{expected_delivery | date:'MMMM d, y'}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 mb-3">
+                                    <h4 class="m-0 text-black">shipping address</h4>
+                                    <hr>
+                                    <ul class="order-detail">
+                                        <li>{{orderAddress?.user_full_name}}</li>
+                                        <li>{{orderAddress?.addressline1}}</li>
+                                        <li>{{orderAddress?.addressline2}}</li>
+                                        <li>{{orderAddress?.city}}</li>
+                                        <li>{{orderAddress?.state}} - {{orderAddress?.postal_code}}</li>
+                                        <li>Contact No. {{orderAddress?.mobile}}</li>
+                                    </ul>
+                                </div>
+
+                                <div class="col-sm-4 payment-mode mb-3">
+                                    <h4 class="m-0 text-black">payment method</h4>
+                                    <hr>
+                                    <p class="text-black">{{payment_method}}</p>
+                                    <p *ngIf="payment_method == 'COD'">Pay on Delivery (Cash/Card). Cash on delivery
+                                        (COD) available. Card/Net banking acceptance subject to device availability.</p>
+                                    <p>Payment Status : <span
+                                            *ngIf="payment_status != 'APPROVED'&& payment_status !='COMPLETED'"
+                                            class="text-warning">{{payment_status | uppercase}}</span><span
+                                            *ngIf="payment_status == 'APPROVED' || payment_status =='COMPLETED'"
+                                            class="text-success">{{payment_status | uppercase}}</span></p>
+                                    <button class="btn btn-sm btn-primary" (click)="paymentDetails()">View Payment
+                                        Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Dialog template -->
+
+<ng-template #addonsDetails let-modal>
+    <div class="modal-content warning_popup" style="width: 100%;">
+        <h3 class="modal-title text-center">
+            <span>Addons Details</span>
+        </h3>
+        <div class="warning_msg">
+            <div class="modal-header">
+                <!-- Add header content here if needed -->
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Addons Name</th>
+                            <th scope="col">Addons Value</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let addon of processedAddonsJson">
+                            <td *ngIf="addon.key">{{ addon.key }}</td>
+                            <td *ngIf="addon.extra_document && addon.extra_document.length">
+                                <div *ngFor="let adn of addon.extra_document" class="d-flex justify-content-between">
+                                    {{ adn.keyname }}
+                                    <span class="img-addons">
+                                        <a [href]="adn.fileUrl" target="_blank">
+                                            <img src="assets/images/fileicon.png" alt="{{ adn.keyname }}">
+                                        </a>
+                                    </span>
+                            <td style="float: right;">{{ adn.price | currency }}</td>
+            </div>
+            </td>
+            <td>{{ addon.value }}</td>
+            <td>{{ addon.price | currency }}</td>
+            </tr>
+            </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</ng-template>

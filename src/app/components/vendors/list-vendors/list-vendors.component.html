@@ -1,0 +1,115 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body vendor_list">
+          <div class="mat-elevation-z8">
+            <div>
+              <input class="form-control search" (keyup)="applyFilter($event)" placeholder="Search">
+            </div>
+
+
+            <table mat-table [dataSource]="dataSource" matSort>
+              <!-- Vendor Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Name</th>
+                <td mat-cell *matCellDef="let element">{{element.name}}</td>
+              </ng-container>
+
+              <!-- Vendor Phone Column -->
+              <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Phone</th>
+                <td mat-cell *matCellDef="let element">{{element.phone}}</td>
+              </ng-container>
+
+              <!-- Vendor Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Email</th>
+                <td mat-cell *matCellDef="let element">{{element.email}}</td>
+              </ng-container>
+
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let element">
+                  <span *ngIf="isAdmin">
+                    <a (click)="statusChange(element)">
+                      <span
+                        [className]="element.status == 'active' ? 'label p-2 label-success mr-2' : 'label p-2 label-danger mr-2'">
+                        {{element.status}}
+                      </span>
+                    </a>
+                  </span>
+                  <span *ngIf="!isAdmin">
+                    <span
+                      [className]="element.status == 'active' ? 'label p-2 label-success mr-2' : 'label p-2 label-danger mr-2'">
+                      {{element.status}}
+                    </span>
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- Actions Column with MatMenu -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <!-- MatMenu for actions -->
+                  <mat-menu #menu="matMenu">
+                    <!-- Main Vendor Menu -->
+                    <ng-container *ngIf="element.vendor_type === 'main'">
+                      <button mat-menu-item (click)="viewStore(element)">
+                        <mat-icon>store</mat-icon> View Store
+                      </button>
+                      <button mat-menu-item (click)="viewProducts(element)">
+                        <mat-icon>shopping_cart</mat-icon> View Products
+                      </button>
+                      <button mat-menu-item (click)="viewOrder(element)">
+                        <mat-icon>receipt</mat-icon> View Order
+                      </button>
+                      <button mat-menu-item (click)="bannerList(element)">
+                        <mat-icon>image</mat-icon> View Banner List
+                      </button>
+                      <button mat-menu-item (click)="edit_vendor(element)">
+                        <mat-icon>edit</mat-icon> Edit
+                      </button>
+                    </ng-container>
+
+                    <!-- Access Vendor Menu -->
+                    <ng-container *ngIf="element.vendor_type === 'access'">
+                      <button mat-menu-item (click)="viewStore(element)">
+                        <mat-icon>store</mat-icon> View Store
+                      </button>
+                      <button mat-menu-item (click)="viewPendingProducts(element)">
+                        <mat-icon>hourglass_empty</mat-icon> GLB Pending Products
+                      </button>
+                      <button mat-menu-item (click)="viewApprovedProducts(element)">
+                        <mat-icon>check_circle</mat-icon> GLB Approved Products
+                      </button>
+                      <button mat-menu-item (click)="viewOrder(element)">
+                        <mat-icon>receipt</mat-icon> View Order
+                      </button>
+                      <button mat-menu-item (click)="edit_vendor(element)">
+                        <mat-icon>edit</mat-icon> Edit
+                      </button>
+                    </ng-container>
+                  </mat-menu>
+                </td>
+              </ng-container>
+
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [length]="totalVendor" [pageSize]="pageSize" [pageIndex]="currentPage"
+              [pageSizeOptions]="[5, 10, 20, 50, 100]" (page)="onPageChange($event)" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

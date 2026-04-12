@@ -1,0 +1,188 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="back_btn">
+            <!-- <a *ngIf="!this.isAdmin" routerLink="/order/order-list" ><img src="assets/images/back.png" alt=""></a>
+            <a *ngIf="this.isAdmin" routerLink="{{currentVendor ? '/vendors/vendor-order-list/'+currentVendor:'/users/user-order-list/'+currentUser}}" ><img src="assets/images/back.png" alt=""></a> -->
+            <a (click)="goBack()"><img src="assets/images/back.png" alt=""></a>
+          </div>
+          <div class="row mb-5">
+            <div class="col-lg-4">
+              <form [formGroup]="orderSubmitForm" (ngSubmit)="onOrderEdit()">
+                <div class="digital-add needs-validation">
+                  <div class="form-group">
+                    <label class="col-form-label"><span>*</span> Order Status</label>
+                    <select class="form-control" required="" formControlName="orderStatus" ngModel="{{ order_status }}">
+                      <option value="">--Select--</option>
+                      <option *ngFor="let order of orderStatuslist" [value]="order.orderstatus">
+                        {{ order.orderstatus | titlecase }}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label"><span>*</span> Order Delivery Date</label>
+                    <input type="date" class="form-control" formControlName="delivery_date" ngModel="{{formattedDeliveryDate}}">
+                  </div>
+                  <div class="form-group mb-0">
+                    <div class="product-buttons">
+                      <button type="button" class="btn btn-primary mr-1" type="submit">
+                        Update
+                      </button>
+                    </div>
+                  </div>
+                  <div [className]="
+                      orderstatusChange
+                        ? 'alert w-75 mx-auto mt-3 alert-success'
+                        : 'alert w-75 mx-auto mt-3 alert-danger'
+                    " role="alert" *ngIf="orderstatusChange">
+                    <div class="d-flex align-items-center justify-content-center">
+                      {{ orderSucessMsg }}
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-8 table-responsive">
+              <table class="w-100">
+                <tr>
+                  <th class="pb-3">Product Image</th>
+                  <th class="pb-3">Product Name</th>
+                  <th class="pb-3">Quantity</th>
+                  <th class="pb-3">Product Price</th>
+                  <th class="pb-3">Addons Price</th>
+                </tr>
+                <tr class="table" *ngFor="let product of oderProducts">
+                  <td>
+                    <img height="50" [src]="product.product_image" [alt]="product.product_name" />
+                  </td>
+                  <td>
+                    {{ product.product_name | titlecase }}
+                  </td>
+                  <td>
+                    {{ product.qty }}
+                  </td>
+                  <td>
+                    {{ product.price | currency }}
+                  </td>
+                  <td>
+                    {{
+                    (product.addonsprice ? product.addonsprice : 0) | currency
+                    }}
+                    <p *ngIf="product.addons.length > 0">
+                      <a class="pe-auto" (click)="viewAddonsDetails(product.addons)">View Addons</a>
+                    </p>
+                  </td>
+                </tr>
+                <tfoot class="table">
+                  <tr>
+                    <td colspan="5" class="text-right">
+                      <strong>Subtotal:</strong>
+                      {{ total_order_amount | currency }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="5" class="text-right">
+                      <strong>Total:</strong>
+                      {{ total_order_amount | currency }}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+            <div class="col-lg-4">
+              <div class="row order-success-sec">
+                <div class="col-sm-12 mb-3">
+                  <h4 class="summary_head text-black">Summary</h4>
+                  <hr />
+                  <ul class="order-detail">
+                    <li>order ID: {{ order_id }}</li>
+                    <li>Order Date: {{ createdAt | date : "MMMM d, y" }}</li>
+                    <li>Order Total: {{ total_order_amount | currency }}</li>
+                  </ul>
+                </div>
+
+                <div class="col-sm-12 mb-3">
+                  <h4 class="m-0 text-black">shipping address</h4>
+                  <hr />
+                  <ul class="order-detail">
+                    <li>{{ orderAddress?.user_full_name }}</li>
+                    <li>{{ orderAddress?.addressline1 }}</li>
+                    <li>{{ orderAddress?.addressline2 }}</li>
+                    <li>{{ orderAddress?.city }}</li>
+                    <li>
+                      {{ orderAddress?.state }} -
+                      {{ orderAddress?.postal_code }}
+                    </li>
+                    <li>Contact No. {{ orderAddress?.mobile }}</li>
+                  </ul>
+                </div>
+
+                <div class="col-sm-12 payment-mode mb-3">
+                  <h4 class="m-0 text-black">payment method</h4>
+                  <hr />
+                  <p class="text-black">{{ payment_method }}</p>
+                  <p *ngIf="payment_method == 'COD'">
+                    Pay on Delivery (Cash/Card). Cash on delivery (COD)
+                    available. Card/Net banking acceptance subject to device
+                    availability.
+                  </p>
+                </div>
+                <div class="col-md-12">
+                  <div class="delivery-sec">
+                    <h4>expected date of delivery</h4>
+                    <h3 class="text-black">
+                      {{ expected_delivery | date : "MMMM d, y" }}
+                    </h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog template -->
+
+<ng-template #addonsDetails >
+  <div class="modal-content warning_popup" style="width: 100%">
+    <h3 class="modal-title text-center"><span>Addons Details</span></h3>
+    <div class="warning_msg">
+      <div class="modal-header"></div>
+      <div class="modal-body">
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Addons Name</th>
+                <th scope="col">Addons Value</th>
+                <th scope="col">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let addon of processedAddonsJson">
+                <td *ngIf="addon.key">{{ capitalizeString(addon.key) }}</td>
+                <td *ngIf="addon.extra_document">
+                  <div *ngFor="let adn of addon.extra_document">
+                    {{ capitalizeString(adn.keyname)
+                    }}<span class="img-addons"><a href="{{ adn.fileUrl }}" target="_blank"><img
+                          src="assets/images/fileicon.png" alt="{{ capitalizeString(adn.keyname) }}" /></a>
+                    </span>
+                  </div>
+                </td>
+                <td>{{ capitalizeString(addon.value) }}</td>
+                <td>{{ addon.price | currency }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

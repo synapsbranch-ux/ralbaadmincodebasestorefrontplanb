@@ -1,0 +1,149 @@
+.color-box span {
+    width: 16px;
+    height: 16px;
+    border: solid 1px #e3e3e3;
+}
+
+.product_size_list label {
+    display: flex;
+    align-items: center;
+}
+
+// .disable-admin .dropzone.dz-clickable {
+//     pointer-events: none;
+//     cursor: default;
+// }
+.d-table
+{
+    display: table;
+}
+.single-image a img {
+    max-width: 150px;
+}
+
+.text-red {
+    color: red !important;
+}
+.deleteglbfile {
+    font-size: 1.5em;
+    margin-left: -10px;
+}
+
+.products-list {
+    width: 100%;
+    max-width: 100%;
+    border: solid 1px #ccc;
+    min-height: 60px;
+    display: block;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+}
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-box:last-child {
+    border: none;
+}
+
+.products-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.prod_img {
+    max-width: 300px;
+}
+
+// a {
+//     cursor: pointer;
+// }
+
+  .dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    background-color: red;
+    border-radius: 50%;
+  }
+  
+  
+  /* --- Animation --- */
+  
+  /* Define animation keyframes */
+  @keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  
+  /* Minimal example */
+  .dot--basic {
+    animation: blink 2s infinite;
+  }
+  /* Animate multiple properties (transform and color) */
+  @keyframes pulse {
+    0%, 100% { 
+      transform: scale(0) translateY(-75%);
+      background-color: blue;
+    }
+    33% {
+      background-color: orange;
+    }
+    50% { 
+      transform: scale(1.125) translateY(0);
+      background-color: red;
+    }
+  }
+  .dot--pulse {
+    animation: pulse 8s infinite;
+  }
+  
+  /* Disable animation if user prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .dot {
+      animation: none;
+    }
+  }
+  
+  
+  /* --- Sample Usage --- */
+  
+  .waiting-btn {
+    --dot-size: 0.5rem;
+    --offline-color: #999;
+    --offline-text-color: #666;
+    
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid red;
+    border-radius: 4px;
+    padding: .5rem 1rem;
+  }
+  
+  .waiting-btn .dot {
+    margin-right: .5rem;
+  }

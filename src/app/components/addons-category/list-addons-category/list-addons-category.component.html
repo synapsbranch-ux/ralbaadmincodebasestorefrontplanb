@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="mat-elevation-z8">
+            <div>
+              <input class="form-control search" (keyup)="applyFilter($event)" placeholder="Search">
+            </div>
+
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <ng-container matColumnDef="category_image">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Catagories Image </th>
+                <td mat-cell *matCellDef="let element"><img src="{{element.category_image}}" alt="" width="100px"> </td>
+              </ng-container>
+
+              <ng-container matColumnDef="category_name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Catagories Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.category_name}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Catagories Status </th>
+                <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+
+              <ng-container matColumnDef="actions" *ngIf="vendorType!=='access'">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button (click)="edit(element)" matTooltip="Edit Category">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

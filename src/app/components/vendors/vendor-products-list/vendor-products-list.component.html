@@ -1,0 +1,80 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-header">
+                    <button class="btn btn-primary mr-2" [disabled]="!productavailable"
+                        (click)="activeAllProduct()">Activate All Products</button>
+                    <button class="btn btn-primary mr-2" (click)="tryonproducts()">All Tryon Products</button>
+                </div>
+                <div class="card-body">
+                    <div id="batchDelete" class="custom-datatable">
+                        <div class="table-responsive">
+                            <div class="mat-elevation-z8">
+                                <div class="d-flex align-items-center">
+                                    <input #searchInput class="form-control search" (keyup)="applyFilter($event)"
+                                        placeholder="Search">
+                                    <button class="btn btn-sm btn-secondary ml-2 mb-3" type="button" (click)="clearSearch()">Clear</button>
+                                </div>
+
+                                <table mat-table [dataSource]="dataSource" matSort>
+
+                                    <ng-container matColumnDef="product_image">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Image </th>
+                                        <td mat-cell *matCellDef="let element"><img src="{{element.product_image}}"
+                                                alt="" width="100px"> </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="product_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Product Title</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.product_name}} </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="product_category_name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Categories </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.product_category_name}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="product_retail_price">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Price </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.product_retail_price}} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="status">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <span *ngIf="isAdmin"><a (click)="statusChange(element)"><span
+                                                        [className]="element.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Click to {{renderValueOpp}}">{{element.status}}</span></a>
+                                            </span>
+
+                                            <span *ngIf="!isAdmin"><span
+                                                    [className]="element.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'">{{element.status}}</span></span>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Actions Column -->
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <button mat-icon-button (click)="edit(element)" matTooltip="Edit Product">
+                                                <mat-icon>edit</mat-icon>
+                                            </button>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+
+                                <mat-paginator [length]="totalProduct" [pageSize]="pageSize" [pageIndex]="currentPage"
+                                    [pageSizeOptions]="[5, 10, 20, 50, 100]" (page)="onPageChange($event)"
+                                    showFirstLastButtons>
+                                </mat-paginator>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

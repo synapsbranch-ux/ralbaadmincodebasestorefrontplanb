@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Store Title</th>
+                                <th scope="col">Store Location</th>
+                                <th *ngIf="isAdmin" scope="col">Store Status</th>
+                                <th scope="col">View 3D Store</th>
+                                <th scope="col">View Store</th>
+                                <th scope="col">Store URL</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="storeavailable">
+                            <tr *ngFor="let store of storeLists">
+                                <th>{{store.store_name}}</th>
+                                <td>{{store.store_location}}</td>
+                                <td *ngIf="isAdmin">
+                                    <a (click)="statusChange(store._id,store.status)">
+                                        <span *ngIf="store.status == 'active'" [className]="store.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'" data-toggle="tooltip" data-placement="top" title="Click to Pending">{{store.status}}</span>
+
+                                        <span *ngIf="store.status == 'pending'" [className]="store.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'" data-toggle="tooltip" data-placement="top" title="Click to Active">{{store.status}}</span>
+
+                                    </a>
+                                </td>
+                                <td><a class="btn btn-xs btn-info store-btn" href="{{'https://vendorstore.ralbatech.com/'+store.store_slug+'/1'}}"
+                                    target="_blank">View 3D Store</a></td>
+                                <td><a class="btn btn-xs btn-info store-btn" href="{{storeurl+''+store.store_slug}}" target="_blank">View Store</a></td>
+                                <td>{{storeurl+''+store.store_slug}}</td>
+                                <td><a class="edit mr-2" (click)="view_store(store._id)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center" *ngIf="!storeavailable">
+                        <h3 class="text-center">No Store Available</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

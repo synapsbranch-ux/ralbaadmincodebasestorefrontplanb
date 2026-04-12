@@ -1,0 +1,52 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="btn-popup pull-right">
+                        <ng-template #content let-modal>
+                            <div class="modal-body">
+                                <form class="needs-validation">
+                                    <div class="form">
+                                        <div class="form-group">
+                                            <label for="validationCustom01" class="mb-1">Category Name :</label>
+                                            <input class="form-control" id="validationCustom01" type="text">
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label for="validationCustom02" class="mb-1">Category Image :</label>
+                                            <input class="form-control" id="validationCustom02" type="file">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" >Save</button>
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal"
+                                    (click)="modal.dismiss('Cross click')">Close</button>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Categories Image</th>
+                            <th scope="col">Name</th>
+                            <!-- <th scope="col">Action</th> -->
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let category of categories_list">
+                            <th><img src="{{category.category_image}}" class="imgTable"></th>
+                            <td>{{category.category_name}}</td>
+                            <!-- <td><a class="edit mr-2" (click)="edit_catagories(category._id)"><i class="fa fa-pencil" aria-hidden="true"></i></a><a class="delete" (click)="delete_catagories(category._id)"><i class="fa fa-trash" aria-hidden="true"></i></a></td> -->
+                          </tr>  
+                     
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

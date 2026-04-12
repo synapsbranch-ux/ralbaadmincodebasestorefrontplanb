@@ -1,0 +1,32 @@
+.edit,.delete
+{
+  cursor: pointer;
+}
+.cursor-pointer{
+cursor: pointer;
+}
+.edit{
+  padding-right: 1rem !important;
+}
+.w-15{
+width: 15% !important;
+}
+.w-10{
+  width: 10% !important;
+}
+.close_modal {
+  right: 0;
+  position: absolute;
+  background: transparent;
+  border: none;
+  top: 1%;
+}
+
+
+a{
+  font-size: 15px !important;
+}
+
+input[placeholder="Child"] {
+  display: none !important;
+}

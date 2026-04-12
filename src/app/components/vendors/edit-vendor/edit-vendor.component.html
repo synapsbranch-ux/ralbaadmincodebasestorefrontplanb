@@ -1,0 +1,89 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body">
+                    <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                        <form [formGroup]="accountForm" class="needs-validation user-add" novalidate="" (ngSubmit)="onVendorEditFormSubmit()">
+                            <div class="form-group">
+                                <label for="validationCustom0" class="col-form-label pt-0"><span>*</span>
+                            Name</label>
+                                <input class="form-control" id="validationCustom0" type="text"  ngModel="{{vName}}" formControlName="vendor_name" (keydown)="handleEnter($event, 'validationCustom1')">
+                                <div *ngIf="vendor_name.invalid && (vendor_name.dirty || vendor_name.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="vendor_name.errors?.required">
+                                        Vendor name is required.
+                                    </div>
+                                    <div *ngIf="vendor_name.errors?.pattern">
+                                        Name Only Contain Letter with space
+                                    </div>
+                                </div>
+                         
+
+                            </div>
+                            <div class="form-group ">
+                                <label for="validationCustom1" class="col-form-label pt-0"><span>*</span> Phone Number</label>
+                               
+                                    <input class="form-control" id="validationCustom1" type="text" ngModel="{{vPhone}}"  formControlName="vendor_phone"  (keydown)="handleEnter($event, 'validationCustom2')">
+                                    <div *ngIf="vendor_phone.invalid && (vendor_phone.dirty || vendor_phone.touched)" class="text text-danger mt-1">
+                                        <div *ngIf="vendor_phone.errors?.required">
+                                            Phone Number is required.
+                                        </div>
+                                        <div *ngIf="vendor_phone.errors?.pattern">
+                                            Only number is allowed.
+                                        </div>
+                                        <div *ngIf="vendor_phone.errors?.maxlength">
+                                            Phone number only allow 12 digits.
+                                        </div>
+                                    </div>
+                               
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom2" class="col-form-label pt-0"><span>*</span>
+                            Email</label>
+                             
+                                    <input class="form-control" id="validationCustom2" type="email" ngModel="{{vEmail}}" formControlName="vendor_email" (keydown)="handleEnter($event)">
+                                    <div *ngIf="vendor_email.invalid && (vendor_email.dirty || vendor_email.touched)" class="text text-danger mt-1">
+                                        <div *ngIf="vendor_email.errors?.required">
+                                            Email is required.
+                                        </div>
+                                        <div *ngIf="vendor_email.errors?.email || vendor_email.errors?.pattern">
+                                        Please enter a valid email.
+                                    </div>
+                                    </div>
+                               
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label pt-0"> Vendor Image Upload (jpg, jpeg, png)</label>
+                                <div class="card-body dropzone-custom p-0 ">
+                                    <div class="dropzone dropzone-primary" [dropzone]="config" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label pt-0"> Vendor Image Upload (jpg, jpeg, png)</label>
+                                <div class="vendor-images  col-xl-8 col-md-7">
+                                    <img class="img-fluid p-2" src="{{uploadVendorImages}}" alt="{{vName}}">
+                                </div>
+                            </div>
+                            <div class="pull-left position-relative">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+
+                            <div [className]="isValid ? 'alert mt-6 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
+                                {{signupMassage}}
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

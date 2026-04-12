@@ -1,0 +1,9 @@
+<span [className]="isAdmin ? 'display-block' : 'display-none'"><a (click)="statusChange()">
+    <span [className]="renderValue == 'active' ? 'text-center cursor-pointer label p-2 label-success' : 'label p-2 cursor-pointer label-danger'" data-toggle="tooltip"
+    data-placement="top" title="Click to {{renderValueopp}}">{{renderValue}}</span>
+</a>
+</span>
+
+<span [className]="!isAdmin ? 'display-block' : 'display-none'"><span [className]="renderValue == 'active' ? 'text-center cursor-pointer label p-2 label-success' : 'label p-2 cursor-pointer label-danger'">{{renderValue}}</span></span>
+
+<span (click)="moduleAccessChange()" class="text-center cursor-pointer label p-2 label-success">Module access</span>

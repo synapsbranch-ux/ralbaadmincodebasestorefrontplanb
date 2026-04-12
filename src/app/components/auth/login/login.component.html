@@ -1,0 +1,101 @@
+<div class="page-wrapper">
+    <div class="authentication-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 p-0 card-left">
+                    <div class="card bg-primary">
+                        <div class="svg-icon d-flex align-items-center justify-content-center">
+                            <img src="assets/images/dashboard/ecommerce-logo.png" alt="Site Logo"
+                                class="img-100 rounded-circle">
+                        </div>
+                        <div class="single-item">
+                            <owl-carousel-o [options]="owlcarouselOptions">
+                                <ng-container *ngFor="let data of owlcarousel">
+                                    <ng-template carouselSlide class="item">
+                                        <div>
+                                            <h3>{{data.title}}</h3>
+                                            <p>{{data.desc}}</p>
+                                        </div>
+                                    </ng-template>
+                                </ng-container>
+                            </owl-carousel-o>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 p-0 card-right">
+                    <div class="card tab2-card">
+                        <div class="card-body">
+                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+                                <li [ngbNavItem]="1">
+                                    <a ngbNavLink><i class="icon-user mr-2"></i> Admin Login</a>
+                                    <ng-template ngbNavContent>
+                                        <div class="tab-pane fade active show" id="account" role="tabpanel"
+                                            aria-labelledby="account-tab">
+                                            <form [formGroup]="loginForm" class="form-horizontal auth-form"
+                                                novalidate="">
+                                                <div class="form-group">
+                                                    <input required="" name="login[email]" type="email"
+                                                        class="form-control" formControlName="email" placeholder="Email"
+                                                        id="adminemail" [(ngModel)]="adminemailrememberfield"
+                                                        (keydown)="handleEnter($event, 'adminpassword')">
+                                                    <div *ngIf="loginData.email.invalid && (loginData.email.dirty || loginData.email.touched)"
+                                                        class="text text-danger mt-1">
+                                                        <div *ngIf="loginData.email.errors?.required">
+                                                            Email is required.
+                                                        </div>
+                                                        <div *ngIf="loginData.email.errors?.email">
+                                                            Please enter a valid email.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="password_sec">
+                                                        <input required="" name="login[password]"
+                                                            type="{{passworfieldtype}}" class="form-control"
+                                                            formControlName="password" placeholder="Password"
+                                                            id="adminpassword" (keydown)="handleEnter($event)"
+                                                            [(ngModel)]="adminpasswordrememberfield">
+                                                        <span (click)="changeIcon()"
+                                                            class="fa {{passwordicon}} field-icon toggle-password"></span>
+                                                    </div>
+
+
+                                                    <div *ngIf="loginData.password.invalid && (loginData.password.dirty || loginData.password.touched)"
+                                                        class="text text-danger mt-1">
+                                                        <div *ngIf="loginData.password.errors?.required">
+                                                            Password is required.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-terms">
+                                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                                        <input type="checkbox" class="custom-control-input mx-2"
+                                                            id="remember_me_admin" value="true"
+                                                            [checked]="adminRemindercheck == 'true'"
+                                                            (click)="rememberme($event)">
+                                                        <label class="custom-control-label"
+                                                            for="remember_me_admin">Remember me</label>
+                                                        <a [routerLink]="['/admin-forgot-password']"
+                                                            routerLinkActive="router-link-active"
+                                                            class="btn btn-default forgot-pass">lost your
+                                                            password</a>
+                                                    </div>
+                                                </div>
+                                                <div class="form-button">
+                                                    <button class="btn btn-primary" [disabled]="temdesable"
+                                                        type="submit" (click)="onSubmitClick()">Login</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                            </ul>
+
+                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,352 @@
+<div class="container-fluid">
+    <form>
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Left Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Left Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+            <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configLeft" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <img class="texture-img" src="{{textureLeftimage}}" alt="left Texture">
+
+
+
+                            </div>
+                            <div class="col-xl-6">
+
+                                <label class="col-form-label pt-0"> Left Texture 3D Image Upload (jpg, jpeg, png)</label>
+
+                                <span class="pb-2 d-block">
+            <a href="javascrip:void(0)" (click)="opengbl(content2)" >Upload guidelines</a>
+        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configLeft3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <img class="texture-img" src="{{textureLeft3Dimage}}" alt="left Texture">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Right Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Right Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                    <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configRight" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureRightimage}}" alt="Right Texture">
+                            </div>
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Right Texture 3D Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                    <a href="javascrip:void(0)" (click)="open(content2)" >Upload guidelines</a>
+                </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configRight3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureRight3Dimage}}" alt="Right Texture">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Top Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Top Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                    <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configTop" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureTopimage}}" alt="Top Texture">
+                            </div>
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Top Texture 3D Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                    <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configTop3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureTop3Dimage}}" alt="Top Texture">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Floor Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Floor Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                                <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                            </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configFloor" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureFloorimage}}" alt="Floor Texture">
+
+                            </div>
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Floor 3D Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                                <a href="javascrip:void(0)" (click)="open(content2)" >Upload guidelines</a>
+                            </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configFloor3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureFloor3Dimage}}" alt="Floor Texture">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Front Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Front Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                            <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configFront" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <img class="texture-img" src="{{textureFrontimage}}" alt="Front Texture">
+                            </div>
+
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Front Texture 3D Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                            <a href="javascrip:void(0)" (click)="open(content2)" >Upload guidelines</a>
+                        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configFront3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureFront3Dimage}}" alt="Front Texture">
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        Back Texture
+                    </div>
+
+                    <div class="card-body">
+                        <div class="digital-add needs-validation row">
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Back Texture Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                            <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configBack" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureBackimage}}" alt="Back Texture">
+                            </div>
+                            <div class="col-xl-6">
+                                <label class="col-form-label pt-0"> Back Texture 3D Image Upload (jpg, jpeg, png)</label>
+                                <span class="pb-2 d-block">
+                            <a href="javascrip:void(0)" (click)="open(content2)" >Upload guidelines</a>
+                        </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="configBack3D" (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img class="texture-img" src="{{textureBack3Dimage}}" alt="Back Texture">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+            </div>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group mb-0 mt-1">
+                                <div class="product-buttons text-right">
+                                    <button type="submit" (click)="updateTexture()" class="btn btn-primary mr-1">Update</button>
+                                </div>
+                            </div>
+
+
+                            <div [className]="textureinsertValid ? 'alert w-85 mx-auto mt-3 alert-success' : 'alert w-85 mx-auto mt-3 alert-danger'" role="alert" *ngIf="textureinsertValid || textureinsertinValid">
+                                <div class="d-flex align-items-center justify-content-center">{{textureinsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>Image must be upload under 5MB </h4>
+        <h3>Image Height : 400px and Width : 400px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>
+
+<ng-template #content2 let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>Image must be upload under 5MB </h4>
+        <h3>Image Height : 400px and Width : 400px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

@@ -1,0 +1,126 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+
+                    <form [formGroup]="updateCouponForm" class="needs-validation" novalidate
+                        (ngSubmit)="onupdateCouponFormSubmit()">
+
+                        <!-- Coupon Name -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Coupon Name
+                            </label>
+                            <input class="form-control" type="text" formControlName="coupon_name" />
+                            <div *ngIf="coupon_name.invalid && coupon_name.touched" class="text-danger">
+                                <div *ngIf="coupon_name.errors?.required">Coupon Name is required</div>
+                                <div *ngIf="coupon_name.errors?.minlength">Minimum 3 characters required</div>
+                            </div>
+                        </div>
+
+                        <!-- Type -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Type
+                            </label>
+                            <select class="form-select" formControlName="type">
+                                <option value="">Select Type</option>
+                                <option value="percentage">Percentage</option>
+                                <option value="fixed">Fixed</option>
+                            </select>
+                            <div *ngIf="type.invalid && type.touched" class="text-danger">
+                                Type is required
+                            </div>
+                        </div>
+
+                        <!-- Discount -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Discount
+                            </label>
+
+                            <div class="input-group">
+                                <input type="number" class="form-control" formControlName="discount" min="0"
+                                    [max]="type.value === 'percentage' ? 100 : null" [disabled]="!type.value"/>
+                                <span class="input-group-text" [class.text-muted]="!type.value" [class.bg-light]="!type.value">
+                                    {{ type.value ? (type.value === 'percentage' ? '%' : '$') : '—' }}
+                                </span>
+                            </div>
+
+                            <div *ngIf="discount.invalid && discount.touched" class="text-danger">
+                                <div *ngIf="discount.errors?.required">Discount is required</div>
+                                <div *ngIf="discount.errors?.min">Discount cannot be negative</div>
+                                <div *ngIf="discount.errors?.max">Percentage cannot exceed 100</div>
+                            </div>
+                        </div>
+
+                        <!-- Min Order Amount -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                 Minimum Order Amount (Optional)
+                            </label>
+                            <input type="number" class="form-control" formControlName="min_order_amount" min="0" />
+                            <div *ngIf="min_order_amount.invalid && min_order_amount.touched" class="text-danger">
+                                <div *ngIf="min_order_amount.errors?.min">Cannot be negative</div>
+                            </div>
+                        </div>
+
+                        <!-- Per User Limit -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Per User Limit <small class="text-muted">
+  (The coupon can be used only once per user).
+</small>
+                            </label>
+                            <input type="number" class="form-control" formControlName="per_user_limit" min="1"/>
+                            <div *ngIf="per_user_limit.invalid && per_user_limit.touched" class="text-danger">
+                                <div *ngIf="per_user_limit.errors?.required">Required</div>
+                                <div *ngIf="per_user_limit.errors?.min">Cannot be 0 or negative</div>
+                            </div>
+                        </div>
+
+                        <!-- Start Date -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Start Date
+                            </label>
+                            <input type="date" class="form-control" formControlName="start_date" />
+                            <div *ngIf="start_date.invalid && start_date.touched" class="text-danger">
+                                Start date is required
+                            </div>
+                        </div>
+
+                        <!-- End Date -->
+                        <div class="form-group mb-4">
+                            <label class="col-form-label">
+                                <span>*</span> End Date
+                            </label>
+                            <input type="date" class="form-control" formControlName="end_date" />
+                            <div *ngIf="end_date.invalid && end_date.touched" class="text-danger">
+                                End date is required
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group mb-3">
+                            <label class="col-form-label">
+                                <span>*</span> Description
+                            </label>
+                            <textarea rows="8" class="form-control" formControlName="description" ></textarea>
+                            <div *ngIf="description.invalid && description.touched" class="text-danger">
+                                Description is required
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            Update
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

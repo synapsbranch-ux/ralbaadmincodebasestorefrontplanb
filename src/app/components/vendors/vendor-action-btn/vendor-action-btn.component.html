@@ -1,0 +1,13 @@
+<span (click)="viewStore()" class="text-center cursor-pointer label p-2 label-warning">View Store</span>
+<!-- <span (click)="viewDepartments()" class="text-center cursor-pointer label p-2 label-warning">View Department</span>
+<span (click)="viewRooms()" class="text-center cursor-pointer label p-2 label-warning">View Room</span> -->
+<span (click)="viewProducts()" class="text-center cursor-pointer label p-2 label-warning">View Products</span>
+<span (click)="viewOrder()" class="text-center cursor-pointer label p-2 label-warning">View Order</span>
+<span (click)="bannerList()" class="text-center cursor-pointer label p-2 label-warning">View Banner List</span>
+<a (click)="statusChange()">
+    <span *ngIf="vendor_status_name == 'active'" [className]="vendor_status_name == 'active' ? 'text-center cursor-pointer label p-2 label-success' : 'label p-2 cursor-pointer label-danger'" data-toggle="tooltip" data-placement="top" title="Click to Pending">{{vendor_status_name}}</span>
+    <span *ngIf="vendor_status_name == 'pending'" [className]="vendor_status_name == 'active' ? 'text-center cursor-pointer label p-2 label-success' : 'label p-2 cursor-pointer label-danger'" data-toggle="tooltip" data-placement="top" title="Click to Active">{{vendor_status_name}}</span>
+</a>
+<!-- <a (click)="statusChange()"><span  [className]="renderValue == 'active' ? 'text-center cursor-pointer label p-2 label-success' : 'label p-2 cursor-pointer label-danger'" data-toggle="tooltip" data-placement="top" title="Click to Pending">{{vendor_status_name}}</span></a> -->
+<!-- <span *ngIf="statuspending" [className]="renderValue == 'pending' ? 'display-block' : 'display-none'"><span (click)="statusChange()" [className]="renderValue == 'pending' ? 'label p-2 cursor-pointer label-warning' : 'label p-2 cursor-pointer label-warning'" data-toggle="tooltip" data-placement="top" title="Click to Active">{{vendor_status_name}}</span></span> -->
+<span (click)="edit_vendor()" class="text-center cursor-pointer label p-2 label-warning">Edit</span>

@@ -1,0 +1,284 @@
+<div class="container-fluid">
+    <form [formGroup]="storeSubmitForm" (ngSubmit)="onStoreSubmit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label class="d-block">
+                                    <input class="checkbox_animated" (click)="copyStatusChange($event)" id="is_logo"
+                                        value="YES" type="checkbox" (keydown)="handleEnter($event, 'vendor_id')">
+                                    Do you want to become an Access Vendor?
+                                </label>
+                            </div>
+
+                            <!-- Apply the fadeInOut animation -->
+                            <div *ngIf="copy_status && !hide_status" [@fadeInOut]>
+                                <table mat-table [dataSource]="dataSource" matSort>
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Name</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="actions">
+                                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                                        <td mat-cell *matCellDef="let element">
+                                            <a (click)="viewStore(element)">
+                                                <span
+                                                    class="text-center cursor-pointer label p-1 label-success mr-2">View
+                                                    Store</span>
+                                            </a>
+                                            <a (click)="selectVendor(element)" [mat-dialog-close]="true">
+                                                <span
+                                                    [className]="element._id == current_vendor_id ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'">
+                                                    Select Vendor
+                                                </span>
+                                            </a>
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                </table>
+
+                                <mat-paginator [length]="totalVendors" [pageSize]="pageSize"
+                                    [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)" showFirstLastButtons>
+                                </mat-paginator>
+
+
+                            </div>
+                            <h5 *ngIf="current_vendor_name">Selected Vendor : {{current_vendor_name}}</h5>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Store
+                                    Name</label>
+                                <input class="form-control" id="validationCustom01" type="text"
+                                    formControlName="store_name" (keydown)="handleEnter($event, 'validationCustom02')">
+                                <div *ngIf="store_name.invalid && (store_name.dirty || store_name.touched)"
+                                    class="text text-danger mt-1">
+                                    <div *ngIf="store_name.errors?.required">
+                                        Store name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom02" class="col-form-label pt-0"><span>*</span> Store
+                                    Location</label>
+                                <input class="form-control" id="validationCustom02" type="text"
+                                    formControlName="store_location"
+                                    (keydown)="handleEnter($event, 'validationCustom03')">
+                                <div *ngIf="store_location.invalid && (store_location.dirty || store_location.touched)"
+                                    class="text text-danger mt-1">
+                                    <div *ngIf="store_location.errors?.required">
+                                        Store location is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom3" class="col-form-label pt-0">Domain name</label>
+                                <input class="form-control" id="validationCustom02" type="text"
+                                    formControlName="domain_name" (keydown)="handleEnter($event, 'validationCustom04')">
+                                <div *ngIf="domain_name.invalid && (domain_name.dirty || domain_name.touched)"
+                                    class="text text-danger mt-1">
+                                    <div *ngIf="domain_name.errors?.required">
+                                        Domain name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom04" class="col-form-label pt-0"> Store Description</label>
+                                <textarea class="form-control" id="validationCustom03" formControlName="store_desc"
+                                    (keydown)="handleEnter($event, 'is_logo')"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="d-block">
+                                    <input class="checkbox_animated" (click)="logoStatusChange($event)" id="is_logo"
+                                        value="YES" type="checkbox" (keydown)="handleEnter($event, 'site_logo_name')">
+                                    Do you have your own logo?
+                                </label>
+                            </div>
+
+                            <div class="form-group" *ngIf="logo_status">
+                                <div class="form-group">
+                                    <label for="site_logo_name" class="col-form-label pt-0">Logo Name</label>
+                                    <input class="form-control" id="site_logo_name" type="text"
+                                        formControlName="logo_name" (keydown)="handleEnter($event, 'site_logo')">
+                                </div>
+                                <h4>OR</h4>
+                                <label for="site_logo" class="col-form-label"> Upload Site Logo</label>
+                            <span class="pl-2">
+                                <a href="javascrip:void(0)" (click)="open(content2)">Upload guidelines</a>
+                            </span>
+                                <input class="form-control" id="site_logo" type="file" accept=".jpg, .png"
+                                    (change)="processFile($event.target.files,'logo')"
+                                    (keydown)="handleEnter($event, 'gbl_img')">
+                                <br />
+                                <p *ngIf="logo_file_name"> File name : <span
+                                        class="text-success">{{logo_file_name}}</span></p>
+                                <p *ngIf="uploadLogoStatus == 'uploading'" class="text-danger">File Uploading ....
+                                </p>
+                                <p *ngIf="uploadLogoStatus == 'uploaded'" class="text-success">File Upload
+                                    successfully </p>
+                                <img *ngIf="logo_file" [src]="logo_file" alt="" class="logo_file">
+
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" [disabled]="upload3DImageStatus == 'uploading'"
+                                        class="btn btn-primary mr-1">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+
+
+                            <div [className]="storeinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'"
+                                role="alert" *ngIf="storeinsertValid || storeinsertinValid">
+                                <div class="d-flex align-items-center justify-content-center">{{storeinsertMessage}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="gbl_img" class="col-form-label"> Upload Store's 3D Object (GLB File)</label>
+
+                                <span class="pl-2">
+                                    <a href="javascrip:void(0)" (click)="opengbl(content)">Upload guidelines</a>
+                                </span>
+
+                                <input [disabled]="copy_status" class="form-control" id="gbl_img" type="file"
+                                    accept=".glb" (change)="processFile($event.target.files,'glb') "
+                                    (keydown)="handleEnter($event, 'jpg_img2')">
+                                <br />
+                                <p *ngIf="store_glb_file_name">GLB File name : <span
+                                        class="text-success">{{store_glb_file_name}}</span></p>
+                                <p *ngIf="upload3DImageStatus == 'uploading'" class="text-danger">Glb Uploading ....
+                                </p>
+                                <p *ngIf="upload3DImageStatus == 'uploaded'" class="text-success">Glb Upload
+                                    successfully </p>
+                                <a *ngIf="storename" href="https://preview.ralbatech.com/{{storename}}"
+                                    target="_blank">View Store</a>
+                            </div>
+
+                            <div *ngIf="false" class="form-group">
+                                <label for="jpg_img2" class="col-form-label"> Upload Store's 2D image (JPG)</label>
+
+                                <input [disabled]="copy_status" class="form-control" id="jpg_img2" type="file"
+                                    accept=".jpg" (change)="processFile($event.target.files,'jpg')"
+                                    (keydown)="handleEnter($event, 'uploadattribute')">
+                                <br />
+                                <p *ngIf="store_jpg_file_name">JPG File name : <span
+                                        class="text-success">{{store_jpg_file_name}}</span></p>
+                                <p *ngIf="upload2DImageStatus == 'uploading'" class="text-danger">JPG Uploading ....
+                                </p>
+                                <p *ngIf="upload2DImageStatus == 'uploaded'" class="text-success">JPG Upload
+                                    successfully </p>
+                                <img *ngIf="store_jpg_file" [src]="store_jpg_file" alt="" width="100%" height="300px">
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="uploadattribute" class="col-form-label"> Upload Store Product JSON</label>
+                                <input [disabled]="copy_status" class="form-control" type="file" id="uploadattribute"
+                                    accept=".json" (change)="uploadOnChange($event)" (keydown)="handleEnter($event)">
+                            </div>
+
+                            <p *ngIf="store_json_file_name">JSON File name : <span
+                                    class="text-success">{{store_json_file_name}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+<ng-template #vendorsModel let-modal>
+    <h2 mat-dialog-title>Main Vendor List</h2>
+    <div mat-dialog-content class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Vendor Name</th>
+                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let element">
+                    <a (click)="viewStore(element)">
+                        <span class="text-center cursor-pointer label p-1 label-success mr-2">View Store</span>
+                    </a>
+                    <a (click)="selectVendor(element)" [mat-dialog-close]="true">
+                        <span
+                            [className]="element._id == current_vendor_id ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'">
+                            Select Vendor
+                        </span>
+                    </a>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="totalVendors" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+            (page)="onPageChange($event)" showFirstLastButtons>
+        </mat-paginator>
+    </div>
+
+    <div mat-dialog-actions>
+        <button mat-button mat-dialog-close>Close</button>
+    </div>
+</ng-template>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">3D Object upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Object type:</b> <span class="text-lowercase"> .glb </span> </h4>
+        <h4>Object must be upload under 20MB </h4>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>
+
+<ng-template #content2 let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>Image must be upload under 2MB </h4>
+        <h3>Image Height : 50px and Width : 150px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

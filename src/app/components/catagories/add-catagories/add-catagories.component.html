@@ -1,0 +1,173 @@
+<div class="container-fluid">
+
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <form [formGroup]="catagoriesSubmitForm" (ngSubmit)="onCatagoriesSubmit()">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <label class="col-form-label pt-0"> Category Image Upload (jpg, jpeg, png)</label>
+                            <span class="pl-2">
+                                <a href="javascrip:void(0)" (click)="open(content)" >Upload guidelines</a>
+                            </span>
+
+                            <div class="card-body dropzone-custom p-0 mb-3">
+                                <div class="dropzone dropzone-primary" [dropzone]="config" (addedFile)="onFileAdded($event)">
+                                    <div class="dz-message needsclick">
+                                        <i class="fa fa-cloud-upload"></i>
+                                        <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <p *ngIf="category_image_name">Category Image File name : <span class="text-success">{{category_image_name}}</span></p>
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span>Category Name</label>
+                                <input class="form-control" id="validationCustom01" type="text" formControlName="catagories_name" (keydown)="handleEnter($event, 'uploadattribute')">
+                                <div *ngIf="catagories_name.invalid && (catagories_name.dirty || catagories_name.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="catagories_name.errors?.required">
+                                        Category Name is required.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit"  class="btn btn-primary mr-1">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+
+
+                            <div [className]="catagoriesinsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="catagoriesinsertValid || catagoriesinsertinValid">
+                                <div class="d-flex align-items-center justify-content-center">{{catagoriesinsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                </form>
+            </div>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Attributes</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="uploadattribute" class="col-form-label pt-0">Upload Attribute JSON</label>
+                                <input class="form-control" type="file" id="uploadattribute" accept=".json" (change)="uploadOnChange($event,true)" (keydown)="handleEnter($event, 'uploadaddons')">
+                            </div>
+                            <br>
+                            <p *ngIf="attribute_json_file_name">Attribute JSON File name : <span class="text-success">{{attribute_json_file_name}}</span></p>
+
+
+                            <div class="desabled-area" *ngFor="let item of attributejsonData">
+                                <div class="form-group">
+                                <label class="d-block pb-2"> <span *ngIf="item.is_mandatory">*</span>  {{ item.attribute_name }}</label>
+                                <ng-container [ngSwitch]="item.attribute_input">
+                                  <input class="form-control" *ngSwitchCase="'input'" type="text" [disabled]="true">
+                                  <input class="form-control" *ngSwitchCase="'range'" type="range" [disabled]="true">
+                                  <input class="form-control" *ngSwitchCase="'file'" type="file" [disabled]="true">
+                                  <textarea class="form-control" *ngSwitchCase="'textarea'" [disabled]="true"></textarea>
+                                  <iframe *ngSwitchCase="'video'" width="420" height="315" [src]="sanitizeURL(item.attribute_value[0].values)"></iframe>
+                                  <select class="form-control" *ngSwitchCase="'select'" [disabled]="true" >
+                                    <option *ngFor="let option of item.attribute_value" [value]="option.values">{{ option.values }}</option>
+                                  </select>
+                                  <select class="form-control" *ngSwitchCase="'multiselect'" [disabled]="true"  multiple>
+                                    <option *ngFor="let option of item.attribute_value" [value]="option.values">{{ option.values }}</option>
+                                  </select>
+
+                                  <div class="radiobutton-sec" *ngSwitchCase="'radio'" >
+                                    <div *ngFor="let option of item.attribute_value; let i = index">
+                                        <label class="col-form-label" for="{{item.attribute_name}}radio{{i}}">
+                                            <input id="{{item.attribute_name}}radio{{i}}"
+                                                name="{{item.attribute_name+'_attribute'}}" type="radio"
+                                                [value]="option.values" [disabled]="true" />
+                                            {{option.values}}</label>
+                                    </div>
+                                </div>
+                                <div class="checkbox-sec" *ngSwitchCase="'checkbox'">
+                                    <div *ngFor="let option of item.attribute_value; let i = index">
+                                        <label class="col-form-label" for="{{item.attribute_name}}check{{i}}">
+                                            <input id="{{item.attribute_name}}check{{i}}"
+                                                name="{{item.attribute_name+'_attribute'}}" type="checkbox"
+                                                [value]="option.values" [disabled]="true" />
+                                            {{option.values}}</label>
+                                    </div>
+                                </div>
+                                </ng-container>
+                            </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Add-Ons</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+                            <div class="form-group">
+                                <label for="uploadaddons" class="col-form-label pt-0">Upload Addons JSON</label>
+                                <input class="form-control" id="uploadaddons" type="file" accept=".json" (change)="uploadOnChange($event,false)" (keydown)="handleEnter($event)" >
+                            </div>
+                            <br>
+                            <p *ngIf="addons_json_file_name">Addons JSON File name : <span class="text-success">{{addons_json_file_name}}</span></p>
+
+                            <div class="desabled-area" *ngFor="let item of addonsjsonData">
+                                <div class="form-group">
+                                    <h4 *ngIf="item.add_ons_level" class="pb-2">{{ item.add_ons_level }}</h4>
+                                <label class="d-block pb-2"> <span *ngIf="item.is_mandatory">*</span> {{ item.add_ons_name }}</label>
+                                <img *ngIf="item.add_ons_image" [src]="item.add_ons_image" alt="Addon Image">
+                                <ng-container [ngSwitch]="item.add_ons_input">
+                                    <input class="form-control" *ngSwitchCase="'input'" type="text" [disabled]="true" >
+                                    <input class="form-control" *ngSwitchCase="'range'" type="range" [disabled]="true" >
+                                    <input class="form-control" *ngSwitchCase="'file'" type="file"  [disabled]="true">
+                                    <textarea class="form-control" *ngSwitchCase="'textarea'" [disabled]="true"></textarea>
+                                    <iframe *ngSwitchCase="'video'" width="420" height="315" [src]="sanitizeURL(item.add_ons_value[0].values)"></iframe>
+                                    <select class="form-control" *ngSwitchCase="'multiselect'" [disabled]="true"  multiple>
+                                        <option *ngFor="let option of item.add_ons_value" [value]="option.values"  > 
+                                            <img *ngIf="option.value_image" [src]="option.value_image" class="Addon-image" /> {{ option.values }}</option>
+                                      </select>
+                                  <select class="form-control" *ngSwitchCase="'select'" [disabled]="true" >
+                                    <option *ngFor="let option of item.add_ons_value" [value]="option.values">
+                                        <img *ngIf="option.value_image" [src]="option.value_image" class="Addon-image" />
+                                         {{ option.values }}</option>
+                                  </select>
+                                    <div *ngSwitchCase="'range-input'">
+                                        <input class="form-control"  type="range" [disabled]="true" >
+                                        <input class="form-control"  type="text" [disabled]="true" >
+                                    </div>
+                                </ng-container>
+                            </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Image type:</b> JPG, JPEG, PNG </h4>
+        <h4>image must be uploaded below 3MB </h4>
+        <h3>Image Height : 1920px and Image Width : 720px</h3>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

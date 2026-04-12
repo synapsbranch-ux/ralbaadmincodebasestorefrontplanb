@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5>My MTGs</h5>
+                    <button class="btn btn-primary btn-sm" (click)="showCreateForm = !showCreateForm">
+                        {{ showCreateForm ? 'Cancel' : '+ New MTG' }}
+                    </button>
+                </div>
+                <div class="card-body">
+
+                    <!-- Create Form -->
+                    <div *ngIf="showCreateForm" class="mb-4 p-3 border rounded bg-light">
+                        <h6>Create New MTG</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Heading Text *</label>
+                                <input type="text" class="form-control" [(ngModel)]="newMTG.heading_text"
+                                       placeholder="Enter heading text">
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label class="form-label">Image *</label>
+                                <input type="file" class="form-control" (change)="onImageSelected($event)"
+                                       accept="image/jpeg,image/png,image/jpg">
+                            </div>
+                            <div class="col-12 mb-2">
+                                <label class="form-label">Description Text *</label>
+                                <textarea class="form-control" rows="3" [(ngModel)]="newMTG.description_text"
+                                          placeholder="Enter description"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-success btn-sm" [disabled]="isCreating" (click)="createMTG()">
+                                    {{ isCreating ? 'Creating...' : 'Submit MTG' }}
+                                </button>
+                                <small class="text-muted ms-2">Your MTG will be pending admin approval</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Loading -->
+                    <div *ngIf="isLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <!-- MTG Table -->
+                    <div *ngIf="!isLoading" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Heading</th>
+                                    <th>Status</th>
+                                    <th>MTG Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let mtg of vendorMTGs">
+                                    <td>
+                                        <img [src]="mtg.section_image" alt="" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px;"
+                                             *ngIf="mtg.section_image">
+                                    </td>
+                                    <td>{{ mtg.heading_text }}</td>
+                                    <td><span [ngClass]="getStatusBadgeClass(mtg.status)">{{ mtg.status }}</span></td>
+                                    <td><span [ngClass]="getStatusBadgeClass(mtg.mtg_status || 'active')">{{ mtg.mtg_status || 'active' }}</span></td>
+                                    <td>{{ mtg.createdAt | date:'shortDate' }}</td>
+                                </tr>
+                                <tr *ngIf="vendorMTGs.length === 0">
+                                    <td colspan="5" class="text-center text-muted">No MTGs found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

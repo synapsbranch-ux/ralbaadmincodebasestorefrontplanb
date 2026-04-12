@@ -1,0 +1,166 @@
+<div class="container-fluid">
+    <form [formGroup]="rooomSubmitForm" (ngSubmit)="onRoomEdit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span> Decoration Name</label>
+                                <input class="form-control" id="validationCustom01" type="text" required="" ngModel="{{roomname}}" formControlName="room_name" value="{{roomname}}">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration Department</label>
+                                <select class="form-control" required="" [(ngModel)]="departmentid" formControlName="department_name" (change)="getdepartment($event.target.value)">
+                    <option value="" selected>--Select--</option>
+                    <option *ngFor="let detartment of departmentLists" [value]="detartment._id">{{detartment.department_name}}</option>
+                </select>
+                            </div>
+                            <div class="form-group" *ngIf="!roomavailablity">
+                                <p class="text-danger">Decoration Already Exist</p>
+                            </div>
+
+                            <!-- <div class="form-group">
+                    <label class="col-form-label"><span>*</span> Room Size</label>
+                    <select class="form-control" required="" formControlName="roomsize" ngModel="{{roomsize_id}}"  (change)="getroomtype($event.target.value)"  >
+                        <option value="">--Select--</option>
+                        <option *ngFor="let subDepartment of subDepartmentsList" [value]="subDepartment.room_size._id">{{subDepartment.room_size.roomsize_name}}</option>
+                    </select>
+                </div>  
+ 
+
+                <div class="form-group">
+                    <label class="col-form-label"><span>*</span> No of {{roomelementname}}</label>
+                    <select class="form-control" required="" formControlName="room_element_no" ngModel="{{roomcount}}">
+                        <option value="">--Select--</option>
+                        <option *ngFor="let item of [].constructor(roomElementNo); let i = index" value="{{i+1}}">{{i+1}}</option>
+                    </select>
+                </div>  -->
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration Left Wall</label>
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roomlefts of roomtextureLeft">
+                                        <ng-template carouselSlide *ngFor="let roomleft of roomlefts">
+                                            <label class="roomside-img ">
+                                <input type="radio" ngModel="{{roomleft_id}}"  value="{{roomleft._id}}" formControlName="room_left_wall" />
+                                <div class="room-image" style="background-image: url({{roomleft.image}})"></div>
+                            </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration right Wall</label>
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roomrights of roomtextureRight">
+                                        <ng-template carouselSlide *ngFor="let roomright of roomrights">
+                                            <label class="roomside-img">
+                                <input type="radio" ngModel="{{roomright_id}}" value="{{roomright._id}}" formControlName="room_right_wall" />
+                                <div class="room-image" style="background-image: url({{roomright.image}})"></div>
+                                </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration top</label>
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roomtops of roomtextureTop">
+                                        <ng-template carouselSlide *ngFor="let roomtop of roomtops">
+                                            <label class="roomside-img">
+                                <input type="radio" ngModel="{{roomtop_id}}" value="{{roomtop._id}}"   formControlName="room_top_wall" />
+                                <div class="room-image" style="background-image: url({{roomtop.image}})"></div>
+                                </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration Floor </label>
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roomfloors of roomtextureFloor">
+                                        <ng-template carouselSlide *ngFor="let roomfloor of roomfloors">
+                                            <label class="roomside-img">
+                                <input type="radio" ngModel="{{roomfloor_id}}" value="{{roomfloor._id}}" formControlName="room_floor" />
+                                <div class="room-image" style="background-image: url({{roomfloor.image}})"></div>
+                                </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration Front Wall</label>
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roomfonts of roomtextureFront">
+                                        <ng-template carouselSlide *ngFor="let roomfont of roomfonts">
+                                            <label class="roomside-img ">
+                                <input type="radio" ngModel="{{roomfont_id}}" value="{{roomfont._id}}" formControlName="room_font_wall" />
+                                <div class="room-image" style="background-image: url({{roomfont.image}})"></div>
+                                </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-form-label"><span>*</span> Decoration Back Wall</label>
+
+
+                                <owl-carousel-o [options]="HomeSliderConfig" class="home-slider">
+                                    <ng-container *ngFor="let roombacks of roomtextureBack">
+                                        <ng-template carouselSlide *ngFor="let roomback of roombacks">
+                                            <label class="roomside-img">
+                                <input type="radio" ngModel="{{roomback_id}}" value="{{roomback._id}}" formControlName="room_back_wall" />
+                                <div class="room-image" style="background-image: url({{roomback.image}})"></div>
+                                </label>
+                                        </ng-template>
+                                    </ng-container>
+                                </owl-carousel-o>
+
+                            </div>
+
+                            <div class="form-group mb-0">
+                                <div class="product-buttons text-center">
+                                    <button type="button" class="btn btn-primary mr-1" [disabled]="rooomSubmitForm.invalid || !roomavailablity" type="submit">Update</button>
+                                </div>
+                            </div>
+
+                            <div [className]="roominsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="roominsertValid">
+                                <div class="d-flex align-items-center justify-content-center">{{roominsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

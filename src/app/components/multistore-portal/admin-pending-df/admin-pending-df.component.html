@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Pending Displayer / Fulfiller Approvals</h5>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="isLoading" class="text-center py-4">
+                        <div class="spinner-border text-primary"></div>
+                    </div>
+
+                    <div *ngIf="!isLoading" class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Product Owner</th>
+                                    <th>Requesting Vendor</th>
+                                    <th>Request Type</th>
+                                    <th>Vendor Price</th>
+                                    <th>Displayer Actions</th>
+                                    <th>Fulfiller Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let entry of pendingEntries">
+                                    <td>{{ entry.product_name }}</td>
+                                    <td>{{ entry.product_owner?.name || 'N/A' }}</td>
+                                    <td>{{ entry.vendor_id?.name || 'N/A' }}</td>
+                                    <td>
+                                        <span class="badge bg-info">{{ getRequestType(entry) }}</span>
+                                    </td>
+                                    <td>{{ entry.vendor_sales_price | currency:'USD' }}</td>
+                                    <td>
+                                        <div *ngIf="entry.displayer_status === 'pending'">
+                                            <button class="btn btn-success btn-xs me-1"
+                                                    [disabled]="isProcessing(entry)"
+                                                    (click)="approveDisplayer(entry)">
+                                                Approve
+                                            </button>
+                                            <button class="btn btn-danger btn-xs"
+                                                    [disabled]="isProcessing(entry)"
+                                                    (click)="rejectDisplayer(entry)">
+                                                Reject
+                                            </button>
+                                        </div>
+                                        <span *ngIf="entry.displayer_status !== 'pending'" class="text-muted">-</span>
+                                    </td>
+                                    <td>
+                                        <div *ngIf="entry.fulfiller_status === 'pending'">
+                                            <button class="btn btn-success btn-xs me-1"
+                                                    [disabled]="isProcessing(entry)"
+                                                    (click)="approveFulfiller(entry)">
+                                                Approve
+                                            </button>
+                                            <button class="btn btn-danger btn-xs"
+                                                    [disabled]="isProcessing(entry)"
+                                                    (click)="rejectFulfiller(entry)">
+                                                Reject
+                                            </button>
+                                        </div>
+                                        <span *ngIf="entry.fulfiller_status !== 'pending'" class="text-muted">-</span>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="pendingEntries.length === 0">
+                                    <td colspan="7" class="text-center text-muted py-3">No pending approvals</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

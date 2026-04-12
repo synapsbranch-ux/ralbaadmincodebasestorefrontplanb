@@ -1,0 +1,59 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+                    <form [formGroup]="updateShippingForm" class="needs-validation user-add" novalidate
+                        (ngSubmit)="onupdateCommissionFormsubmit()">
+                        <div class="form-group">
+                            <label for="validationCustom0" class="col-form-label pt-0"> Platform charge (%)</label>
+                            <input class="form-control" id="validationCustom0"
+                                [ngModel]="platform_charge_percentage_value" type="text" required=""
+                                formControlName="platform_charge_percentage" maxlength="2">
+                            <div *ngIf="platform_charge_percentage.invalid && (platform_charge_percentage.dirty || platform_charge_percentage.touched)"
+                                class="text text-danger mt-1">
+                                <div *ngIf="platform_charge_percentage.errors?.required">Platform charge percentage is
+                                    required.</div>
+                                <div *ngIf="platform_charge_percentage.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="platform_charge_percentage.errors?.maxlength">only allow 3 digits.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom1" class="col-form-label pt-0"><span>*</span>Copy Product
+                                Commission (%)</label>
+                            <input class="form-control" id="validationCustom1" [ngModel]="copy_product_commission_value"
+                                type="text" required="" formControlName="copy_product_commission" maxlength="2">
+                            <div *ngIf="copy_product_commission.invalid && (copy_product_commission.dirty || copy_product_commission.touched)"
+                                class="text text-danger mt-1">
+                                <div *ngIf="copy_product_commission.errors?.required">Copy Product Commission is
+                                    required.</div>
+                                <div *ngIf="copy_product_commission.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="copy_product_commission.errors?.maxlength">only allow 2 digits.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom1" class="col-form-label pt-0"><span>*</span>GLB Commission
+                                (%)</label>
+
+                            <input class="form-control" id="validationCustom1" [ngModel]="glb_commission_value"
+                                type="text" required="" formControlName="glb_commission" maxlength="2">
+                            <small>**This commision mainly apply for access vendor</small>
+                            <div *ngIf="glb_commission.invalid && (glb_commission.dirty || glb_commission.touched)"
+                                class="text text-danger mt-1">
+                                <div *ngIf="glb_commission.errors?.required">Copy Product Commission is required.</div>
+                                <div *ngIf="glb_commission.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="glb_commission.errors?.maxlength">only allow 2 digits.</div>
+                            </div>
+                        </div>
+                        <div *ngIf="vendorType !== 'access'" class="pull-left position-relative">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

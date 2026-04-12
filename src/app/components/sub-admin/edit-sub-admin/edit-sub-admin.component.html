@@ -1,0 +1,50 @@
+<div class="container-fluid">
+    <form [formGroup]="subadminSubmitForm" (ngSubmit)="onSubadminEdit()">
+        <div class="row subadmin-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="subadmin-add needs-validation">
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span>Name</label>
+                                <input class="form-control" id="validationCustom01" type="text" required=""  [(ngModel)]="subadminName" formControlName="subadmin_name" (keydown)="handleEnter($event, 'validationCustom02')">
+
+                                <div *ngIf="subadmin_name.invalid && (subadmin_name.dirty || subadmin_name.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_name.errors?.required">
+                                        Sub-admin name is required.
+                                    </div>
+                                    <div *ngIf="subadmin_name.errors?.pattern">
+                                        Name Only Contain Letter with space
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="validationCustom02" class="col-form-label pt-0"><span>*</span>Email</label>
+                                <input class="form-control" id="validationCustom02" type="text"  [(ngModel)]="subadminEmail" required="" formControlName="subadmin_email" (keydown)="handleEnter($event)">
+                                <div *ngIf="subadmin_email.invalid && (subadmin_email.dirty || subadmin_email.touched)" class="text text-danger mt-1">
+                                    <div *ngIf="subadmin_email.errors?.required">
+                                        Email is required.
+                                    </div>
+                                    <div *ngIf="subadmin_email.errors?.email || subadmin_email.errors?.pattern">
+                                    Please enter a valid email.
+                                </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" class="btn btn-primary mr-1" type="submit">Upadte</button>
+                                </div>
+                            </div>
+
+                            <div [className]="subadmininsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'" role="alert" *ngIf="subadmininsertValid">
+                                <div class="d-flex align-items-center justify-content-center">{{subadmininsertMessage}}</div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

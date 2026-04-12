@@ -1,0 +1,47 @@
+.edit,
+.delete {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.store-img {
+    max-width: 35px;
+    max-height: 35px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.close_modal {
+    right: 0;
+    position: absolute;
+    background: transparent;
+    border: none;
+    top: 1%;
+}
+img{
+    padding: 10px;
+}
+
+/* Larger and more visible Website View switch (consistent with add/edit) */
+.form-check.form-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.web-view-switch.form-check-input[role='switch'] {
+  transform: scale(1.2);
+  transform-origin: left center;
+  cursor: pointer;
+}
+
+.web-view-switch.form-check-input[role='switch']:focus {
+  box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb, 13, 110, 253), 0.25);
+}
+
+.web-view-switch.form-check-input[role='switch']:checked {
+  background-color: var(--bs-primary, #0d6efd);
+  border-color: var(--bs-primary, #0d6efd);
+}

@@ -1,0 +1,92 @@
+<div class="container-fluid">
+    <form [formGroup]="addMediaSubmitForm" (ngSubmit)="onMediaTextSubmit()">
+        <div class="row product-adding">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="digital-add needs-validation">
+
+                            <div class="form-group">
+                                <label for="validationCustom01" class="col-form-label pt-0"><span>*</span>Heading Text</label>
+                                <input class="form-control" id="heading_text" type="text" required=""
+                                    formControlName="heading_text" (keydown)="handleEnter($event, 'description_text')">
+                                <div *ngIf="heading_text.invalid && (heading_text.dirty || heading_text.touched)"
+                                    class="text text-danger mt-1">
+                                    <div *ngIf="heading_text.errors?.required">
+                                      Heading text is required.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description_text" class="col-form-label pt-0"><span>*</span>Description Text</label>
+                                <textarea class="form-control" id="description_text" formControlName="description_text"
+                                    (keydown)="handleEnter($event, '')"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tag_List" class="col-form-label"> Tags</label>
+                                <ng-select formControlName="tag_List"
+                                           [items]="tagList"
+                                           bindLabel="tag_name"
+                                           [multiple]="true"
+                                           [closeOnSelect]="false"
+                                           placeholder="Select tags"
+                                           id="tag_List">
+                                </ng-select>
+                            </div>
+
+                            <div>
+                                <label class="col-form-label pt-0"> Section Image Upload (jpg, jpeg,
+                                    png)</label>
+                                <span class="pl-2">
+                                    <a href="javascrip:void(0)" (click)="open(content)">Upload guidelines</a>
+                                </span>
+
+                                <div class="card-body dropzone-custom p-0">
+                                    <div class="dropzone dropzone-primary" [dropzone]="config"
+                                        (error)="onUploadError($event)" (success)="onUploadSuccess($event)">
+                                        <div class="dz-message needsclick">
+                                            <i class="fa fa-cloud-upload"></i>
+                                            <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-0 mt-4">
+                                <div class="product-buttons text-center">
+                                    <button type="submit" [disabled]="addMediaSubmitForm.invalid"
+                                        class="btn btn-primary mr-1" type="submit">Add</button>
+                                    <button type="reset" class="btn btn-light">Discard</button>
+                                </div>
+                            </div>
+                            <div [className]="mediainsertValid ? 'alert w-75 mx-auto mt-3 alert-success' : 'alert w-75 mx-auto mt-3 alert-danger'"
+                                role="alert" *ngIf="mediainsertValid || mediainsertValid">
+                                <div class="d-flex align-items-center justify-content-center">{{mediainsertMessage}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Image upload Instruction</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h4><b>Object type:</b> <span class="text-lowercase"> .jpg / .jpeg / png </span> </h4>
+        <h4>Object must be upload under 10MB </h4>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+</ng-template>

@@ -1,0 +1,36 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+                    <form [formGroup]="updateShippingForm" class="needs-validation user-add" novalidate (ngSubmit)="onupdateShippingFormubmit()">
+                        <div class="form-group">
+                            <label for="validationCustom0" class="col-form-label pt-0"><span>*</span> Shipping and Handling charge</label>
+                            <input class="form-control" id="validationCustom0" [ngModel]="shipping_charge_value" type="text" required="" formControlName="shipping_charge" maxlength="3" >
+                            <div *ngIf="shipping_charge.invalid && (shipping_charge.dirty || shipping_charge.touched)" class="text text-danger mt-1">
+                                <div *ngIf="shipping_charge.errors?.required">Shipping and Handling charge is required.</div>
+                                <div *ngIf="shipping_charge.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="shipping_charge.errors?.maxlength">only allow 3 digits.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="validationCustom1" class="col-form-label pt-0"><span>*</span>Tax (%)</label>
+                            <input class="form-control" id="validationCustom1" [ngModel]="tax_percentage_value" type="text" required="" formControlName="tax_percentage" maxlength="2">
+                            <div *ngIf="tax_percentage.invalid && (tax_percentage.dirty || tax_percentage.touched)" class="text text-danger mt-1">
+                                <div *ngIf="tax_percentage.errors?.required">Tax is required.</div>
+                                <div *ngIf="tax_percentage.errors?.pattern">Only number is allowed.</div>
+                                <div *ngIf="tax_percentage.errors?.maxlength">only allow 2 digits.</div>
+                            </div>
+                        </div>
+                        <div *ngIf="vendorType !== 'access'" class="pull-left position-relative">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Container-fluid Ends-->

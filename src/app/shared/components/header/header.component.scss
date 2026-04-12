@@ -1,0 +1,24 @@
+
+.mt2{
+    margin-top: -2%;
+}
+
+.profile-icon {
+    position: relative;
+}
+
+.page-main-header .main-header-right .nav-right ul li .profile-icon .dotted-animation {
+    position: absolute;
+    right: 5px;
+    top: 58px;
+}
+@media only screen and (max-width: 1366px)
+{
+    .page-main-header .main-header-right .nav-right > ul > li:first-child {
+        width: 6%;
+    }
+}
+
+.img-radius.rounded-circle {
+    max-width: 55px;
+}

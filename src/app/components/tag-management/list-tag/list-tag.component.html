@@ -1,0 +1,110 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mat-elevation-z8">
+                        <div>
+                          <input class="form-control search" (keyup)="applyFilter($event)" placeholder="Search">
+                        </div>
+            
+                        <table mat-table [dataSource]="dataSource" matSort>
+            
+                          <ng-container matColumnDef="tag_image">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag Image </th>
+                            <td mat-cell *matCellDef="let element"><img src="{{element.tag_image?element.tag_image:'assets/images/cat3.png'}}" alt="" width="100px"> </td>
+                          </ng-container>
+            
+                          <ng-container matColumnDef="tag_name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag Name </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tag_name}} </td>
+                          </ng-container>
+            
+                          <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tag Status </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span *ngIf="isAdmin"><a (click)="statusChange(element)">
+                                    <span [className]="element.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'" data-toggle="tooltip"
+                                    data-placement="top" title="Click">{{element.status}}</span>
+                                </a>
+                                </span>
+                                
+                                <span  *ngIf="!isAdmin"><span [className]="element.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'">{{element.status}}</span></span>
+
+                            </td>
+                          </ng-container>
+
+                          <!-- Website View Status Column -->
+                          <ng-container matColumnDef="web_view_status">
+                            <th mat-header-cell *matHeaderCellDef> Website View </th>
+                            <td mat-cell *matCellDef="let element">
+                              <div class="form-check form-switch mb-0">
+                                <input
+                                  class="form-check-input web-view-switch"
+                                  type="checkbox"
+                                  role="switch"
+                                  [checked]="element.web_view_status === 'active' || element.web_view_status === true || element.web_view_status === 1"
+                                  (change)="webViewStatusChange(element, $event)"
+                                  id="webViewSwitch_{{element._id}}"
+                                />
+                                <label class="form-check-label" [for]="'webViewSwitch_' + element._id">
+                                  {{ (element.web_view_status === 'active' || element.web_view_status === true || element.web_view_status === 1) ? 'On' : 'Off' }}
+                                </label>
+                              </div>
+                            </td>
+                          </ng-container>
+            
+                          <!-- Actions Column -->
+                          <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef> Actions </th>
+                            <td mat-cell *matCellDef="let element">
+                              <button mat-icon-button (click)="edit(element)" matTooltip="Edit Tag">
+                                <mat-icon>edit</mat-icon>
+                              </button>
+                              <button mat-icon-button (click)="delete(element)" matTooltip="Delete Tag">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </td>
+                          </ng-container>
+            
+                          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+            
+                        <mat-paginator [length]="totalTags" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+                                 (page)="onPageChange($event)" showFirstLastButtons>
+                                </mat-paginator>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dialog template -->
+
+        <ng-template #tagDelete>
+            <div class="modal-content warning_popup ">
+                <h3 class="modal-title text-center"><span>WARNING!</span></h3>
+                <div class="warning_msg">
+                    <div class="modal-header">
+                        <button type="button" class="close_modal">
+                            <img src="assets/images/close.webp" width="24" alt="" [mat-dialog-close]="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <p>Are you sure to delete "TAG" ? it will delete all data related to this "TAG". Be careful ! </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="d-flex">
+                            <button [mat-dialog-close]="true" (click)="deleteConfirm()" class="btn btn-danger">Yes</button>
+                            <button [mat-dialog-close]="true" class="btn btn-sucess">No</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-template>
+
+    </div>
+</div>

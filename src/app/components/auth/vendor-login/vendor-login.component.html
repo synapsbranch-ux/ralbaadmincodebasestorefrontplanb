@@ -1,0 +1,249 @@
+<div class="page-wrapper">
+    <div class="authentication-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 p-0 card-left">
+                    <div class="card bg-primary">
+                        <div class="svg-icon d-flex align-items-center justify-content-center">
+                            <img src="assets/images/dashboard/ecommerce-logo.png" alt="Site Logo"
+                                class="img-100 rounded-circle">
+                        </div>
+                        <div class="single-item">
+                            <owl-carousel-o [options]="owlcarouselOptions">
+                                <ng-container *ngFor="let data of owlcarousel">
+                                    <ng-template carouselSlide class="item">
+                                        <div>
+                                            <h3>{{data.title}}</h3>
+                                            <p>{{data.desc}}</p>
+                                        </div>
+                                    </ng-template>
+                                </ng-container>
+                            </owl-carousel-o>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 p-0 card-right">
+                    <div class="card tab2-card">
+                        <div class="card-body">
+                            <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
+                                <li [ngbNavItem]="1">
+                                    <a ngbNavLink><i class="icon-user mr-2"></i>Vendor Login</a>
+                                    <ng-template ngbNavContent>
+                                        <div class="tab-pane fade active show" id="account" role="tabpanel"
+                                            aria-labelledby="account-tab">
+                                            <form [formGroup]="loginForm" class="form-horizontal auth-form"
+                                                (ngSubmit)="onVendorlogFormSubmit()">
+                                                <div class="form-group">
+                                                    <input required="" name="login[username]" type="email"
+                                                        class="form-control" placeholder="User Email" id="vendoremail"
+                                                        formControlName="vendor_username"
+                                                        [(ngModel)]="vendoremailrememberfield"
+                                                        (keydown)="handleEnter1($event, 'vendorpassword')">
+
+                                                    <div *ngIf="vLogin.vendor_username.invalid && (vLogin.vendor_username.dirty || vLogin.vendor_username.touched)"
+                                                        class="text text-danger mt-1">
+                                                        <div *ngIf="vLogin.vendor_username.errors?.required">
+                                                            User Email is required.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="password_sec">
+                                                        <input required="" name="login[password]"
+                                                            type="{{passworfieldtype}}" id="vendorpassword"
+                                                            class="form-control" placeholder="Password"
+                                                            formControlName="vendor_password"
+                                                            [(ngModel)]="vendorpasswordrememberfield"
+                                                            (keydown)="handleEnter1($event,'remember_me_vendor')">
+                                                        <span (click)="changeIcon()"
+                                                            class="fa {{passwordicon}} field-icon toggle-password"></span>
+                                                    </div>
+
+                                                    <div *ngIf="vLogin.vendor_password.invalid && (vLogin.vendor_password.dirty || vLogin.vendor_password.touched)"
+                                                        class="text text-danger mt-1">
+                                                        <div *ngIf="vLogin.vendor_password.errors?.required">
+                                                            User Password is required.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-terms">
+                                                    <div class="custom-control custom-checkbox mr-sm-2">
+                                                        <input type="checkbox" class="custom-control-input mx-2"
+                                                            id="remember_me_vendor" value="true"
+                                                            [checked]="vendorRemindercheck == 'true'"
+                                                            (click)="rememberme($event)"
+                                                            (keydown)="handleEnter1($event)">
+                                                        <label class="custom-control-label"
+                                                            for="remember_me_vendor">Remember me</label>
+                                                        <a [routerLink]="['/vendor-forgot-password']"
+                                                            routerLinkActive="router-link-active"
+                                                            class="btn btn-default forgot-pass">lost your
+                                                            password</a>
+                                                    </div>
+                                                </div>
+                                                <div class="form-button">
+                                                    <button class="btn btn-primary" [disabled]="temdesable"  type="submit">Login</button>
+                                                </div>
+                                                <!-- <div [className]="loginValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="loginValid || loginInValid">
+                                        <div class="d-flex align-items-center"><span *ngIf="loginValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{loginMassage}}</div>
+                                    </div> -->
+                                            </form>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                                <li [ngbNavItem]="2">
+                                    <a ngbNavLink><i class="icon-unlock mr-2"></i> Vendor Register</a>
+                                    <ng-template ngbNavContent>
+                                        <form [formGroup]="registerForm" class="form-horizontal auth-form"
+                                            (ngSubmit)="onVendorRegFormSubmit()" *ngIf="!vendorOTPStatus">
+                                            <div class="form-group">
+                                                <input required="" type="text" class="form-control"
+                                                    placeholder="Enter name" formControlName="vendor_name"
+                                                    (keydown)="handleEnter($event, 'email_id')">
+
+                                                <div *ngIf="vReg.vendor_name.invalid && (vReg.vendor_name.dirty || vReg.vendor_name.touched)"
+                                                    class="text text-danger mt-1">
+                                                    <div *ngIf="vReg.vendor_name.errors?.required">
+                                                        Name is required.
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <input required="" type="text" class="form-control" id="email_id"
+                                                    placeholder="Enter e-Mail" formControlName="vendor_email"
+                                                    (keydown)="handleEnter($event, 'password')">
+                                                <div *ngIf="vReg.vendor_email.invalid && (vReg.vendor_email.dirty || vReg.vendor_email.touched)"
+                                                    class="text text-danger mt-1">
+                                                    <div *ngIf="vReg.vendor_email.errors?.required">
+                                                        Email is required.
+                                                    </div>
+                                                    <div
+                                                        *ngIf="vReg.vendor_email.errors?.email || vReg.vendor_email.errors?.pattern">
+                                                        Please enter a valid email.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input required="" type="password" id="password"  class="form-control" placeholder="Enter password" formControlName="password" (keydown)="handleEnter($event, 'repeat_password')">
+
+                                                <div *ngIf="vReg.password.invalid && (vReg.password.dirty || vReg.password.touched)" class="text text-danger mt-1">
+                                                    <div *ngIf="vReg.password.errors?.required">
+                                                        Password is required.
+                                                    </div>
+                                                    <div *ngIf="vReg.password.errors?.minlength">
+                                                        Password will be minimum 8 character.
+                                                    </div>
+                                                    <div *ngIf="vReg.password.errors?.maxlength">
+                                                        Password will be miximum 15 character.
+                                                    </div>
+                                                    <div class="text-danger" class="error-text" *ngIf="vReg.password.hasError('passwordStrength')">
+                                                        {{vReg.password.errors['passwordStrength']}}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                <div class="form-group">
+                                                    <input required="" type="password" id="repeat_password"  class="form-control" placeholder="Enter confirm password" formControlName="repeat_password" (keydown)="handleEnter($event, 'vendor_phone')">
+
+                                                <div *ngIf="vReg.repeat_password.invalid && (vReg.repeat_password.dirty || vReg.repeat_password.touched) && vReg.repeat_password.errors"
+                                                    class="text text-danger mt-1">
+                                                    <div *ngIf="vReg.repeat_password.errors?.required">
+                                                        Confirm password required..
+                                                    </div>
+                                                    <div *ngIf="vReg.repeat_password.errors.matching">Passwords do not
+                                                        match</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input required="" type="text" class="form-control" id="vendor_phone" placeholder="Enter phone no" formControlName="vendor_phone"  (keydown)="handleEnter($event, 'catagories_name')">
+
+                                                <div *ngIf="vReg.vendor_phone.invalid && (vReg.vendor_phone.dirty || vReg.vendor_phone.touched)" class="text text-danger mt-1">
+                                                    <div *ngIf="vReg.vendor_phone.errors?.required">
+                                                        Phone number is required.
+                                                    </div>
+                                                    <div *ngIf="vReg.vendor_phone.errors?.pattern">
+                                                        Only number is allowed.
+                                                    </div>
+                                                    <div *ngIf="vReg.vendor_phone.errors?.maxlength">
+                                                        Phone number only allow 12 digits.
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <select class="form-control" id="catagories_name"
+                                                    formControlName="catagories_name" [(ngModel)]="selectcat"
+                                                    (change)="getcatval($event.target.value)"
+                                                    (keydown)="handleEnter($event, 'other_categories')">
+                                                    <option disabled selected value="1">--Select Categories--</option>
+                                                    <option *ngFor="let catagories of catagoriesLists"
+                                                        [value]="catagories.category_name">{{catagories.category_name}}
+                                                    </option>
+                                                    <option value="others">Others</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group" *ngIf="othersstatus">
+                                                <input type="text" class="form-control"
+                                                    placeholder="Other categories name" id="other_categories"
+                                                    formControlName="other_categories"
+                                                    (keydown)="handleEnter($event, 'customControlAutosizing1')">
+                                            </div>
+
+                                            <div class="form-terms">
+                                                <div class="custom-control custom-checkbox mr-sm-2">
+                                                    <input type="checkbox" class="custom-control-input mx-2"
+                                                        id="customControlAutosizing1" (keydown)="handleEnter($event)">
+                                                    <label class="custom-control-label"
+                                                        for="customControlAutosizing1"><span>I agree all statements
+                                                            in <a [routerLink]="['../privacy-policy']" target="_blank"
+                                                                class="pull-right">Terms
+                                                                &amp;
+                                                                Conditions</a></span></label>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-button">
+                                                <button class="btn btn-primary" type="submit">Register</button>
+                                            </div>
+                                            <!-- 
+                                    <div [className]="isValid ? 'alert mt-3 alert-success' : 'alert mt-3 alert-danger'" role="alert" *ngIf="isValid || !phValid">
+
+                                        <div class="d-flex align-items-center"><span *ngIf="isValid"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i> &nbsp;</span>{{signupMassage}}</div>
+                                    </div> -->
+
+                                        </form>
+
+                                        <div class="form-row" *ngIf="vendorOTPStatus">
+                                            <div class="col-md-12">
+                                                <label for="otp">OTP</label>
+                                                <ng-otp-input
+                                                    [config]="{length:4, isPasswordInput: true, allowNumbersOnly: true}"
+                                                    (onInputChange)="onOtpChange($event)"></ng-otp-input>
+                                                <!-- <div class="otpshow mb-3">Your OTP is {{getOtpVal}}</div> -->
+                                                <div class="timer-sec pt-3" *ngIf="otpTimerstatus">
+                                                    OTP Time Left <span>{{transform(counter)}}</span><span
+                                                        class="pl-2"><a *ngIf="counter == 0"
+                                                            (click)="otpresend()">Resend OTP</a></span>
+                                                </div>
+                                                <!-- <div class="alert alert-danger" role="alert" *ngIf="!otpValid">
+                                            {{otpMassage}}
+                                        </div> -->
+                                                <button type="submit" class="btn btn-primary"
+                                                    (click)="otpverify()">Verify OTP</button>
+
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                            </ul>
+
+                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

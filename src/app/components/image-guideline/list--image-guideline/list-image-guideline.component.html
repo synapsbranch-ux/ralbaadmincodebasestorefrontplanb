@@ -1,0 +1,35 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col">Image Guidline</th>
+                            <th scope="col">Image Guidline Page</th>
+                            <th scope="col">Image Size</th>
+                            <th scope="col">Image width</th>
+                            <th scope="col">Image height</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                        </thead>
+                        <tbody *ngIf="imageinstavailable">
+                          <tr *ngFor="let imageinst of imageinstlist">
+                            <th>{{imageinst.image_instruction}}</th>
+                            <td>{{imageinst.page_image}}</td>
+                            <th>{{imageinst.image_size}}</th>
+                            <td>{{imageinst.image_width}}</td>
+                            <td>{{imageinst.image_height}}</td>
+                            <td><a class="edit mr-2" (click)="edit_imageinst(imageinst._id)"><i class="fa fa-pencil" aria-hidden="true"></i></a></td>
+                          </tr>                       
+                        </tbody>
+                      </table>
+                      <div class="text-center" *ngIf="!imageinstavailable">
+                        <h3 class="text-center">No Image Guidline Available</h3>    
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

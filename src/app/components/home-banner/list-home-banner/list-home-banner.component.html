@@ -1,0 +1,41 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <table class="table">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col " class="w-15">Banner Image</th>
+                <th scope="col">Banner Heading</th>
+                <th scope="col">Banner Sub Heading</th>
+                <th *ngIf="isAdmin" scope="col">Banner Status</th>
+                <th scope="col" class="w-10">Action</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="banneravailable">
+              <tr *ngFor="let banner of bannerLists">
+                <th><img src="{{banner.banner_background_image}}" class="img-fluid banner-img"></th>
+                <th>{{banner.banner_title}}</th>
+                <td>{{banner.banner_subtitle}}</td>
+                <td *ngIf="isAdmin && banner.status == 'active' "><span
+                    [className]="banner.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'"
+                    data-toggle="tooltip" data-placement="top" title="Active">{{banner.status}}</span></td>
+                <td *ngIf="isAdmin && banner.status == 'inactive' "><span
+                    [className]="banner.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'"
+                    data-toggle="tooltip" data-placement="top" title="Inactive">{{banner.status}}</span></td>
+
+                <td><a class="edit mr-2" (click)="edit_banner(banner._id)"><i class="fa fa-pencil"
+                      aria-hidden="true"></i></a><a *ngIf="isAdmin" class="delete"
+                    (click)="delete_banner(banner._id)"><i class="fa fa-trash" aria-hidden="true"></i></a></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center" *ngIf="!banneravailable">
+            <h3 class="text-center">No Home Banner Available</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col " class="w-15">Banner Image</th>
+                                <th scope="col">Banner Heading</th>
+                                <th scope="col">Banner Sub Heading</th>
+                                <th scope="col">Banner Status</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="banneravailable">
+                            <tr *ngFor="let banner of bannerLists">
+                                <th><img src="{{banner.banner_background_image}}" class="img-fluid banner-img"></th>
+                                <th>{{banner.banner_title}}</th>
+                                <td>{{banner.banner_subtitle}}</td>
+                                <td *ngIf="banner.status == 'active' "><span (click)="bannerStatusChange(banner._id,banner.status)" [className]="banner.status == 'active' ? 'text-center cursor-pointer label p-1 label-success' : 'label p-1 cursor-pointer label-danger'" data-toggle="tooltip"
+                                        data-placement="top" title="Click To Pending">{{banner.status}}</span></td>
+                                <td *ngIf="banner.status == 'pending' "><span (click)="bannerStatusChange(banner._id,banner.status)" [className]="banner.status == 'active' ? 'text-center cursor-pointer  label p-1 label-success' : 'label p-1 cursor-pointer label-danger'" data-toggle="tooltip"
+                                        data-placement="top" title="Click To Active">{{banner.status}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center" *ngIf="!banneravailable">
+                        <h3 class="text-center">No Home Banner Available</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

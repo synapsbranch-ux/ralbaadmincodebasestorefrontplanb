@@ -1,0 +1,115 @@
+/* You can add global styles to this file, and also import other style files */
+@import "node_modules/@ng-select/ng-select/themes/default.theme.css";
+@import "node_modules/@ag-grid-community/styles/ag-grid.css";
+@import "node_modules/@ag-grid-community/styles/ag-theme-alpine.css"; // Or any other theme you're using
+
+body {
+  overflow: scroll !important; /* Make sure overflow is set to auto */
+}
+
+mat-dialog-container {
+  margin: 0 auto;
+}
+
+.table .thead-light th {
+  color: #495057;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.table td,
+.table th {
+  padding: .75rem !important;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.pl-2,
+.px-2 {
+  padding-left: .5rem !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.mat-mdc-dialog-surface {
+  padding: 1em !important;
+}
+
+.password_sec {
+  position: relative;
+}
+
+.mat-elevation-z8 .search {
+  width: 40%;
+  padding: 0.6em;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.mat-elevation-z8 {
+  padding-top: 15px;
+  padding-left: 10px;
+}
+
+.table a {
+  padding-left: 0px !important;
+  color: #0d6efd !important;
+}
+
+.field-icon {
+  position: absolute;
+  right: 15px;
+  bottom: 18px;
+  cursor: pointer;
+}
+
+.mr-2 {
+  margin-right: .5rem !important;
+}
+
+.mat-sort-header-container {
+  flex-direction: column;
+}
+
+.mdc-data-table__cell,
+.mat-mdc-header-cell {
+  text-align: center !important;
+}
+
+.user-image table tr th:nth-child(6),
+.user-image table tr td:nth-child(6) {
+  width: 100px !important;
+}
+
+.order-list-table tr th:nth-child(1),
+.vendor_list_table tr th:nth-child(1) {
+  width: 100px !important;
+}
+
+.order-list-table td:nth-child(1),
+.vendor_list_table td:nth-child(1) {
+  word-break: break-all;
+}
+
+/* Apply CSS for devices with a screen width between 720px and 1480px */
+@media screen and (min-width: 720px) and (max-width: 1537px) {
+  /* Your CSS rules here */
+  .btn-sm, .btn-group-sm > .btn {
+    font-size: 9px !important;
+}
+.btn{
+  padding: 0.4rem .4rem !important;
+  margin-bottom: 5px;
+}
+.label.p-2 {
+  font-size: 10px;
+  padding: 6px !important;
+}
+}

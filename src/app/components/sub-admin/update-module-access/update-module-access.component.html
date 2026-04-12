@@ -1,0 +1,24 @@
+<div class="container-fluid">
+    <div class="row product-adding">
+
+        <div class="col-xl-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="digital-add needs-validation">
+                        <div class="form-group">
+                            <label class="col-form-label">List of Modules</label>
+                            <div class="m-checkbox-inline mb-4 custom-checkbox-ml d-flex checkbox-animated" *ngFor="let modules of listMoules let i = index">
+                                <label class="d-block" for="edo-ani-{{i}}">
+                        <input class="checkbox_animated" id="edo-ani-{{i}}" value="{{modules._id}}" type="checkbox" [checked]="getSelectionmodule(modules._id)" (click)="moduleSelect($event.target.value)">
+                        {{modules.module_name}}
+                    </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

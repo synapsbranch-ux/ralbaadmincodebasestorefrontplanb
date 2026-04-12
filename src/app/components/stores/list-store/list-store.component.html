@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Store Title</th>
+                                <th scope="col">Store Location</th>
+                                <th scope="col">Store Status</th>
+                                <th scope="col">View 3D Store</th>
+                                <th scope="col">View Store</th>
+                                <th scope="col">Store URL</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="storeavailable">
+                            <tr *ngFor="let store of storeLists">
+                                <th>{{store.store_name}}</th>
+                                <td>{{store.store_location}}</td>
+                                <td><span
+                                        [className]="store.status == 'active' ? 'text-center label p-1 label-success' : 'label p-1  label-danger'">{{store.status}}</span>
+                                </td>
+                                <td><a class="btn btn-xs btn-info store-btn" href="{{'https://vendorstore.ralbatech.com/'+store.store_slug+'/1'}}"
+                                    target="_blank">View 3D Store</a></td>
+                                <td><a class="btn btn-xs btn-info store-btn" href="{{storeurl+''+store.store_slug}}"
+                                        target="_blank">View Store</a></td>
+                                        <td>{{storeurl+''+store.store_slug}}</td>
+                                <td><a class="text-success edit mr-2" (click)="edit_store(store._id)"><i
+                                            class="fa fa-pencil" aria-hidden="true"></i></a><a *ngIf="vendorType!=='access'"
+                                        class="text-danger delete"
+                                        (click)="delete_store(store._id, store.store_owner._id)"><i class="fa fa-trash"
+                                            aria-hidden="true"></i></a></td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center" *ngIf="!storeavailable">
+                        <h3 class="text-center">No Store Available</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dialog template -->
+
+        <ng-template #storeDelete>
+            <div class="modal-content warning_popup ">
+                <h3 class="modal-title text-center"><span>WARNING!</span></h3>
+                <div class="warning_msg">
+                    <div class="modal-header">
+                        <button type="button" class="close_modal">
+                            <img src="assets/images/close.webp" width="24" alt="" [mat-dialog-close]="true">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center">
+                            <p>Are you sure you want to delete this "Store"? It will delete all data related to this "Store". Be careful!</p>
+                                <p></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="d-flex">
+                            <button [mat-dialog-close]="true" (click)="deleteConfirm()"
+                                class="btn btn-danger">Yes</button>
+                            <button [mat-dialog-close]="true" class="btn btn-sucess">No</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-template>
+
+    </div>
+</div>

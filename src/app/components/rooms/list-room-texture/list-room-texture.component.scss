@@ -1,0 +1,21 @@
+.edit,.delete
+{
+  cursor: pointer;
+}
+.cursor-pointer{
+  cursor: pointer;
+  }
+
+  .edit{
+    padding-right: 1rem !important;
+}
+.img-fluid {
+  width: 80px;
+}
+th img{
+  display: block;
+  margin: 0 auto;
+}
+.table th, .table td {
+  vertical-align: inherit !important; 
+}
