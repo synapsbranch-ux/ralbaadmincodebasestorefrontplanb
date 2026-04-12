@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Augmentation de la mémoire RAM pour Node.js (6 GB)
 # Ajout de flags pour stabiliser la gestion de la mémoire pendant la phase finale
-ENV NODE_OPTIONS="--max-old-space-size=6144 --optimize-for-size --gc-interval=100"
+ENV NODE_OPTIONS="--max-old-space-size=6144"
 
 # Installation des dépendances
 # On copie d'abord les fichiers de gestion des paquets pour optimiser le cache Docker
