@@ -9,7 +9,7 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 COPY package.json package-lock.json* ./
 # --ignore-scripts is harmless here (no broken postinstall like storefrontend)
 # --legacy-peer-deps works around outdated peer ranges
-RUN npm ci --legacy-peer-deps --ignore-scripts
+RUN npm install --legacy-peer-deps --ignore-scripts
 
 # Copy the rest of the sources
 COPY . .
