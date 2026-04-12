@@ -4,13 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "add": "ng add",
     "clean-old-build": "ssh -i /home/ratpc-013/Desktop/Projects/3D-Ecoommerce-Ralbatech/assets/3D-PEM-File/ralbakeypair.pem ubuntu@3.137.128.230 'sudo rm -rf /var/www/html/admin/*'",
-    "upload-build": "scp -i /home/ratpc-013/Desktop/Projects/3D-Ecoommerce-Ralbatech/assets/3D-PEM-File/ralbakeypair.pem -r ./dist/multikart-backend/* ubuntu@3.137.128.230:/var/www/html/admin"
+    "upload-build": "scp -i /home/ratpc-013/Desktop/Projects/3D-Ecoommerce-Ralbatech/assets/3D-PEM-File/ralbakeypair.pem -r ./dist/ralbatech-admin/* ubuntu@3.137.128.230:/var/www/html/admin"
   },
   "private": true,
   "dependencies": {
