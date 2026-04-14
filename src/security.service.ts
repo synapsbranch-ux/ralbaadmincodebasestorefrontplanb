@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 
 
 
-export type HttpMethod = 'GET' | 'POST';
+export type HttpMethod = 'GET' | 'POST' | 'PATCH';
 
 
 @Injectable({
@@ -67,6 +67,23 @@ export class SecurityService {
     body: any = null,
     clientId: string = this.clientId // fallback to default clientId
   ): Observable<T> {
+    const performRequest = (
+      reqMethod: HttpMethod,
+      reqUrl: string,
+      reqHeaders: HttpHeaders,
+      reqBody: any = null
+    ) => {
+      switch (reqMethod) {
+        case 'GET':
+          return this.http.get<any>(reqUrl, { headers: reqHeaders });
+        case 'PATCH':
+          return this.http.patch<any>(reqUrl, reqBody, { headers: reqHeaders });
+        case 'POST':
+        default:
+          return this.http.post<any>(reqUrl, reqBody, { headers: reqHeaders });
+      }
+    };
+
     // In non-production, skip signing/encryption entirely
     if (!this.isProd) {
       const token = localStorage.getItem('user_token');
@@ -74,11 +91,7 @@ export class SecurityService {
         ...(token ? { 'Authorization': `Bearer ${token}` } : {})
       });
 
-      const request$ = (
-        method === 'GET'
-          ? this.http.get<any>(url, { headers })
-          : this.http.post<any>(url, body, { headers })
-      );
+      const request$ = performRequest(method, url, headers, body);
 
       return request$.pipe(map((resp) => resp));
     }
@@ -118,11 +131,8 @@ export class SecurityService {
           ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         });
 
-        const request$ = (
-          method === 'GET'
-            ? this.http.get<any>(url, { headers })
-            : this.http.post<any>(url, (body && !isFormData) ? { carrierPacket: encryptedBodyStr } : body, { headers })
-        );
+        const requestBody = (body && !isFormData) ? { carrierPacket: encryptedBodyStr } : body;
+        const request$ = performRequest(method, url, headers, requestBody);
 
         return request$.pipe(
           map((resp) => this.tryDecryptResponse(resp))
