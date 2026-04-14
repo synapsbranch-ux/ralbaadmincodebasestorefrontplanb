@@ -6,10 +6,10 @@ export const environment = {
   // production: true,
   production: false,
 
-  // baseUrl: 'https://backendimplementationbralbatech-production.up.railway.app/api/v1/',
-  // secureUrl: 'https://backendimplementationbralbatech-production.up.railway.app/sec/v1/',
-  baseUrl: 'https://backendimplementationbralbatech-production.up.railway.app/api/v1/',
-  secureUrl: 'https://backendimplementationbralbatech-production.up.railway.app/sec/v1/',
+  // baseUrl: 'https://loving-passion-production-157f.up.railway.app/api/v1/',
+  // secureUrl: 'https://loving-passion-production-157f.up.railway.app/sec/v1/',
+  baseUrl: 'https://loving-passion-production-157f.up.railway.app/api/v1/',
+  secureUrl: 'https://loving-passion-production-157f.up.railway.app/sec/v1/',
 
   storeURL: 'https://ralbatech.com/vendor/',
   ENC_KEY: "WmS81fl8F6v3ghnN7VzbrTKbd85H7n4uFwhcFj89j0M=",
