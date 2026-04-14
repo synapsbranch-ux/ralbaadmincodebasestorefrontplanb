@@ -210,4 +210,25 @@ export class ProductService {
     return this.securityService.signedRequest('POST', url, data);
   }
 
+  // Plan B Multi-Store
+  getPlatformAllProducts(data: any): Observable<any> {
+    const url = environment.baseUrl + 'products/platform-all';
+    return this.securityService.signedRequest('POST', url, data);
+  }
+
+  updateDisplayerFulfiller(productId: string, data: any): Observable<any> {
+    const url = environment.baseUrl + `products/${productId}/displayer-fulfiller`;
+    return this.securityService.signedRequest('PATCH', url, data);
+  }
+
+  getPendingDisplayerFulfillers(): Observable<any> {
+    const url = environment.baseUrl + 'admin/products/displayer-fulfiller/pending';
+    return this.securityService.signedRequest('GET', url);
+  }
+
+  updateAdminDisplayerFulfillerStatus(productId: string, vendorId: string, data: any): Observable<any> {
+    const url = environment.baseUrl + `admin/products/${productId}/displayer-fulfiller/${vendorId}`;
+    return this.securityService.signedRequest('PATCH', url, data);
+  }
+
 }

@@ -50,7 +50,7 @@ export class MultistorePortalService {
     /** Update vendor's displayer/fulfiller status for a product */
     updateDisplayerFulfiller(productId: string, data: any): Observable<any> {
         const url = environment.baseUrl + `products/${productId}/displayer-fulfiller`;
-        return this.securityService.signedRequest('POST', url, data);
+        return this.securityService.signedRequest('PATCH', url, data);
     }
 
     // ============== Admin Approval Endpoints ==============
@@ -64,7 +64,7 @@ export class MultistorePortalService {
     /** Admin: Update MTG status (approve/reject) */
     updateMTGStatus(mtgId: string, data: any): Observable<any> {
         const url = environment.baseUrl + `admin/mtg/${mtgId}/status`;
-        return this.securityService.signedRequest('POST', url, data);
+        return this.securityService.signedRequest('PATCH', url, data);
     }
 
     /** Admin: Get pending displayer-fulfiller entries */
@@ -76,6 +76,6 @@ export class MultistorePortalService {
     /** Admin: Update displayer-fulfiller status (approve/reject) */
     updateDisplayerFulfillerStatus(productId: string, vendorId: string, data: any): Observable<any> {
         const url = environment.baseUrl + `admin/products/${productId}/displayer-fulfiller/${vendorId}`;
-        return this.securityService.signedRequest('POST', url, data);
+        return this.securityService.signedRequest('PATCH', url, data);
     }
 }

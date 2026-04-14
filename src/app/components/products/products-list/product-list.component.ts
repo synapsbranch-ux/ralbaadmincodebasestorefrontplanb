@@ -44,6 +44,12 @@ export class ProductListComponent implements OnInit {
   private isSearching: boolean = false;
   private lastSearchAt: number = 0;
   private lastListAt: number = 0;
+  showPlatformProducts = false;
+  platformProducts: any[] = [];
+  isPlatformLoading = false;
+  savingPlatformProductId: string | null = null;
+  adminPendingDfEntries: any[] = [];
+  loadingAdminPendingDf = false;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
@@ -138,9 +144,124 @@ export class ProductListComponent implements OnInit {
     }
     this.didApplyScroll = false;
     this.productlist(this.currentPage, this.pageSize);
+    if (this.userrole === 'admin') {
+      this.loadAdminPendingDf();
+    }
 
     this.vendorType = localStorage.getItem('vendor_type');
     console.log("Vendor Type Of The User::::::::::::::", this.vendorType);
+  }
+
+  onPlatformToggleChange() {
+    this.currentPage = 0;
+    if (this.showPlatformProducts) {
+      this.loadPlatformProducts();
+      return;
+    }
+    this.productlist(this.currentPage, this.pageSize);
+  }
+
+  loadPlatformProducts() {
+    this.isPlatformLoading = true;
+    this.productservice.getPlatformAllProducts({
+      page: this.currentPage + 1,
+      limit: this.pageSize
+    }).subscribe(
+      res => {
+        this.platformProducts = res?.data?.products || [];
+        this.totalProduct = res?.data?.totalCount || this.platformProducts.length;
+        this.dataSource.data = this.platformProducts.map((p: any) => ({
+          ...p,
+          product_image: p.product_image?.length > 0 ? p.product_image[0].pro_image : 'assets/images/cat3.png'
+        }));
+        this.isPlatformLoading = false;
+        this.changeDetectorRef.detectChanges();
+      },
+      error => {
+        this.isPlatformLoading = false;
+        this.toastrService.error(error?.error?.message || 'Unable to load platform products');
+      }
+    );
+  }
+
+  getDfBadgeClass(status: string): string {
+    switch (status) {
+      case 'active':
+        return 'label p-1 label-success';
+      case 'pending':
+        return 'label p-1 label-warning';
+      case 'inactive':
+        return 'label p-1 label-danger';
+      default:
+        return 'label p-1 label-default';
+    }
+  }
+
+  togglePlatformDisplayer(product: any) {
+    const nextStatus = product.vendor_displayer_status === 'none' ? 'active' : 'none';
+    this.savePlatformDf(product, { displayer_status: nextStatus });
+  }
+
+  togglePlatformFulfiller(product: any) {
+    const nextStatus = product.vendor_fulfiller_status === 'none' ? 'active' : 'none';
+    if (nextStatus !== 'none' && (!product.vendor_sales_price || Number(product.vendor_sales_price) <= 0)) {
+      this.toastrService.error('Vendor price is required to request fulfiller status');
+      return;
+    }
+    this.savePlatformDf(product, {
+      fulfiller_status: nextStatus,
+      vendor_sales_price: product.vendor_sales_price
+    });
+  }
+
+  savePlatformVendorPrice(product: any) {
+    const value = Number(product.vendor_sales_price);
+    if (!value || value <= 0) {
+      this.toastrService.error('Please enter a valid vendor price');
+      return;
+    }
+    this.savePlatformDf(product, { vendor_sales_price: value });
+  }
+
+  private savePlatformDf(product: any, payload: any) {
+    this.savingPlatformProductId = product._id;
+    this.productservice.updateDisplayerFulfiller(product._id, payload).subscribe(
+      () => {
+        this.toastrService.success('Request saved and sent for admin approval');
+        this.savingPlatformProductId = null;
+        this.loadPlatformProducts();
+      },
+      error => {
+        this.savingPlatformProductId = null;
+        this.toastrService.error(error?.error?.message || 'Unable to save request');
+      }
+    );
+  }
+
+  loadAdminPendingDf() {
+    this.loadingAdminPendingDf = true;
+    this.productservice.getPendingDisplayerFulfillers().subscribe(
+      res => {
+        this.adminPendingDfEntries = res?.data?.pendingEntries || [];
+        this.loadingAdminPendingDf = false;
+      },
+      error => {
+        this.loadingAdminPendingDf = false;
+      }
+    );
+  }
+
+  updateAdminDf(entry: any, payload: any) {
+    const vendorId = entry?.vendor_id?._id || entry?.vendor_id;
+    this.productservice.updateAdminDisplayerFulfillerStatus(entry.product_id, vendorId, payload).subscribe(
+      () => {
+        this.toastrService.success('Pending request updated');
+        this.loadAdminPendingDf();
+      },
+      error => {
+        this.toastrService.error(error?.error?.message || 'Unable to update request');
+      }
+    );
   }
 
   productlist(page: number, pageSize: number) {
@@ -213,7 +334,11 @@ export class ProductListComponent implements OnInit {
     this.pageSize = event.pageSize;          // Update page size when it changes
     this.currentPage = event.pageIndex;      // Get the current page index (0-based)
     // Fetch data for the new page and page size
-    this.productlist(this.currentPage, this.pageSize);
+    if (this.showPlatformProducts) {
+      this.loadPlatformProducts();
+    } else {
+      this.productlist(this.currentPage, this.pageSize);
+    }
     localStorage.setItem('admin_prod_pageSize', this.pageSize.toString());
     if (this.searchInput) {
       setTimeout(() => this.searchInput.nativeElement.focus());

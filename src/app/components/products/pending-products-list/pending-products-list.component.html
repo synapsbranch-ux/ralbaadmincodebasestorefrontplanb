@@ -75,6 +75,42 @@
             </div>
         </div>
 
+        <div class="col-sm-12 mt-3" *ngIf="userrole === 'vendor'">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="mb-3">Displayer/Fulfiller Pending</h5>
+                    <div *ngIf="isDfPendingLoading" class="text-center py-2">
+                        <span class="spinner-border spinner-border-sm"></span>
+                    </div>
+                    <div class="table-responsive" *ngIf="!isDfPendingLoading">
+                        <table class="table table-sm table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Owner</th>
+                                    <th>Displayer</th>
+                                    <th>Fulfiller</th>
+                                    <th>My Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let p of dfPendingProducts">
+                                    <td>{{ p.product_name }}</td>
+                                    <td>{{ p.product_owner?.name || '-' }}</td>
+                                    <td><span class="label p-1 label-warning">{{ p.vendor_displayer_status }}</span></td>
+                                    <td><span class="label p-1 label-warning">{{ p.vendor_fulfiller_status }}</span></td>
+                                    <td>{{ p.vendor_sales_price || '-' }}</td>
+                                </tr>
+                                <tr *ngIf="dfPendingProducts.length === 0">
+                                    <td colspan="5" class="text-center text-muted">No displayer/fulfiller pending products</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Dialog template -->
 
         <ng-template #productDelete>

@@ -1,8 +1,97 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
-      <div class="card">
+        <div class="card">
         <div class="card-body">
+          <div *ngIf="userrole === 'vendor'" class="d-flex justify-content-between align-items-center mb-3">
+            <div class="btn-group">
+              <button class="btn btn-sm"
+                [ngClass]="activeMtgTab === 'my' ? 'btn-primary' : 'btn-outline-primary'"
+                (click)="changeMtgTab('my')">
+                Mes MTGs
+              </button>
+              <button class="btn btn-sm"
+                [ngClass]="activeMtgTab === 'platform' ? 'btn-primary' : 'btn-outline-primary'"
+                (click)="changeMtgTab('platform')">
+                MTGs Plateforme
+              </button>
+            </div>
+            <button class="btn btn-sm btn-success" (click)="goToNewMTGForm()">
+              Nouveau MTG
+            </button>
+          </div>
+
+          <div *ngIf="userrole === 'vendor' && activeMtgTab === 'platform'" class="table-responsive mb-3">
+            <table class="table table-sm table-hover">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Heading</th>
+                  <th>Vendor</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let mtg of platformMTGs">
+                  <td><img [src]="mtg.section_image || 'assets/images/cat3.png'" width="90"></td>
+                  <td>{{ mtg.heading_text }}</td>
+                  <td>{{ mtg.vendor_id?.name || 'Platform' }}</td>
+                  <td>
+                    <button class="btn btn-sm btn-outline-primary"
+                      [disabled]="addingPlatformMtgId === mtg._id"
+                      (click)="addPlatformMTGToStore(mtg)">
+                      {{ addingPlatformMtgId === mtg._id ? 'Ajout...' : 'Ajouter à ma boutique' }}
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="platformMTGs.length === 0 && !isPlatformMtgLoading">
+                  <td colspan="4" class="text-center text-muted">Aucun MTG disponible</td>
+                </tr>
+                <tr *ngIf="isPlatformMtgLoading">
+                  <td colspan="4" class="text-center"><span class="spinner-border spinner-border-sm"></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="userrole !== 'vendor' || activeMtgTab === 'my'">
+          <div *ngIf="userrole === 'admin'" class="table-responsive mb-3">
+            <h6 class="mb-2">MTGs en attente d'approbation</h6>
+            <div *ngIf="loadingAdminPendingMTGs" class="text-center py-2">
+              <span class="spinner-border spinner-border-sm"></span>
+            </div>
+            <table class="table table-sm table-bordered" *ngIf="!loadingAdminPendingMTGs">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Heading</th>
+                  <th>Vendor</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let mtg of adminPendingMTGs">
+                  <td><img [src]="mtg.section_image || 'assets/images/cat3.png'" width="90"></td>
+                  <td>{{ mtg.heading_text }}</td>
+                  <td>{{ mtg.vendor_id?.name || 'Platform' }}</td>
+                  <td>{{ mtg.createdAt | date:'shortDate' }}</td>
+                  <td>
+                    <button class="btn btn-xs btn-success me-1"
+                      [disabled]="processingAdminPendingMtgId === mtg._id"
+                      (click)="updateAdminPendingMtgStatus(mtg, 'active')">Approuver</button>
+                    <button class="btn btn-xs btn-danger"
+                      [disabled]="processingAdminPendingMtgId === mtg._id"
+                      (click)="updateAdminPendingMtgStatus(mtg, 'inactive')">Rejeter</button>
+                  </td>
+                </tr>
+                <tr *ngIf="adminPendingMTGs.length === 0">
+                  <td colspan="5" class="text-center text-muted">Aucun MTG en attente</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
           <div class="mat-elevation-z8">
 
             <input class="form-control search mb-2" (keyup)="applyFilter($event)" placeholder="Search" />
@@ -81,6 +170,7 @@
               (page)="onPageChange($event)" showFirstLastButtons>
             </mat-paginator>
 
+          </div>
           </div>
         </div>
       </div>

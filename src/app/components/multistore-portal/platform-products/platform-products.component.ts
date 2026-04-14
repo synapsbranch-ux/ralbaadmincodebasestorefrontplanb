@@ -26,15 +26,8 @@ export class PlatformProductsComponent implements OnInit {
     }
 
     loadProducts() {
-        const vendorId = localStorage.getItem('user_id');
-        if (!vendorId) {
-            this.toastr.error('Vendor ID not found');
-            return;
-        }
-
         this.isLoading = true;
         this.multistoreService.getPlatformAllProducts({
-            vendor_id: vendorId,
             page: this.currentPage,
             limit: this.pageSize
         }).subscribe(
@@ -74,13 +67,9 @@ export class PlatformProductsComponent implements OnInit {
     }
 
     private saveDF(product: any, data: any) {
-        const vendorId = localStorage.getItem('user_id');
         this.savingProductId = product._id;
 
-        this.multistoreService.updateDisplayerFulfiller(product._id, {
-            vendor_id: vendorId,
-            ...data
-        }).subscribe(
+        this.multistoreService.updateDisplayerFulfiller(product._id, data).subscribe(
             res => {
                 this.toastr.success('Updated! Pending admin approval.');
                 this.savingProductId = null;

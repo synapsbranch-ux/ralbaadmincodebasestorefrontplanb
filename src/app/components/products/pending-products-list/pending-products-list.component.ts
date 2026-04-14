@@ -35,6 +35,8 @@ export class PendingProductListComponent implements OnInit {
   currentPage = 0;
   vendorType: any;
   upload3DImage: any;
+  dfPendingProducts: any[] = [];
+  isDfPendingLoading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -49,9 +51,30 @@ export class PendingProductListComponent implements OnInit {
       this.isAdmin = true;
     }
     this.productlist(this.currentPage, this.pageSize);
+    this.loadDisplayerFulfillerPending();
 
     this.vendorType = localStorage.getItem('vendor_type');
     console.log("Vendor Type Of The User::::::::::::::", this.vendorType);
+  }
+
+  loadDisplayerFulfillerPending() {
+    if (this.userrole !== 'vendor') {
+      return;
+    }
+    this.isDfPendingLoading = true;
+    this.productservice.getPlatformAllProducts({
+      page: 1,
+      limit: 300
+    }).subscribe(
+      res => {
+        const products = res?.data?.products || [];
+        this.dfPendingProducts = products.filter((p: any) => p.df_pending === true);
+        this.isDfPendingLoading = false;
+      },
+      error => {
+        this.isDfPendingLoading = false;
+      }
+    );
   }
 
   productlist(page: number, pageSize: number) {

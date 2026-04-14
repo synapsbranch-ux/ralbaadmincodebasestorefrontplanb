@@ -10,6 +10,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MediaTextContentService } from '../media-text-content.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MultistorePortalService } from '../../multistore-portal/multistore-portal.service';
 
 
 @Component({
@@ -41,8 +42,22 @@ export class ListMediaTextContentComponent implements OnInit {
   currentUrl: string;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  activeMtgTab: 'my' | 'platform' = 'my';
+  platformMTGs: any[] = [];
+  isPlatformMtgLoading = false;
+  addingPlatformMtgId: string | null = null;
+  adminPendingMTGs: any[] = [];
+  loadingAdminPendingMTGs = false;
+  processingAdminPendingMtgId: string | null = null;
 
-  constructor(private router: Router, private mediaTextContentService: MediaTextContentService, private route: ActivatedRoute, private dialog: MatDialog, private toastrService: ToastrService) {
+  constructor(
+    private router: Router,
+    private mediaTextContentService: MediaTextContentService,
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private toastrService: ToastrService,
+    private multistoreService: MultistorePortalService
+  ) {
 
   }
 
@@ -68,8 +83,85 @@ export class ListMediaTextContentComponent implements OnInit {
     this.currentUrl = this.router.url;
     localStorage.setItem('lastUrl', this.currentUrl);
 
+    if (this.userrole === 'vendor') {
+      this.loadPlatformMTGs();
+    }
+    if (this.userrole === 'admin') {
+      this.loadAdminPendingMTGs();
+    }
 
 
+
+  }
+
+  changeMtgTab(tab: 'my' | 'platform') {
+    this.activeMtgTab = tab;
+    if (tab === 'platform' && this.platformMTGs.length === 0) {
+      this.loadPlatformMTGs();
+    }
+  }
+
+  loadPlatformMTGs() {
+    this.isPlatformMtgLoading = true;
+    this.multistoreService.getPlatformMTGList().subscribe(
+      res => {
+        this.platformMTGs = res?.data?.mtgList || [];
+        this.isPlatformMtgLoading = false;
+      },
+      error => {
+        this.isPlatformMtgLoading = false;
+      }
+    );
+  }
+
+  addPlatformMTGToStore(mtg: any) {
+    this.addingPlatformMtgId = mtg._id;
+    this.multistoreService.addMTGToVendorStore({
+      media_text_contain_id: mtg._id
+    }).subscribe(
+      () => {
+        this.toastrService.success('MTG added to your store');
+        this.addingPlatformMtgId = null;
+        this.allMediaTextList(this.currentPage, this.pageSize);
+      },
+      error => {
+        this.addingPlatformMtgId = null;
+        const message = error?.error?.message || 'Unable to add MTG';
+        this.toastrService.error(message);
+      }
+    );
+  }
+
+  loadAdminPendingMTGs() {
+    this.loadingAdminPendingMTGs = true;
+    this.multistoreService.getAdminPendingMTGs().subscribe(
+      res => {
+        this.adminPendingMTGs = res?.data?.pendingMTGs || [];
+        this.loadingAdminPendingMTGs = false;
+      },
+      error => {
+        this.loadingAdminPendingMTGs = false;
+      }
+    );
+  }
+
+  updateAdminPendingMtgStatus(mtg: any, mtg_status: 'active' | 'inactive') {
+    this.processingAdminPendingMtgId = mtg._id;
+    this.multistoreService.updateMTGStatus(mtg._id, { mtg_status }).subscribe(
+      () => {
+        this.processingAdminPendingMtgId = null;
+        this.toastrService.success(`MTG ${mtg_status === 'active' ? 'approved' : 'rejected'}`);
+        this.loadAdminPendingMTGs();
+      },
+      error => {
+        this.processingAdminPendingMtgId = null;
+        this.toastrService.error(error?.error?.message || 'Unable to update MTG status');
+      }
+    );
+  }
+
+  goToNewMTGForm() {
+    this.router.navigate(['/media-text-content/add-media-text-content']);
   }
 
   trackById(index: number, item: any) {

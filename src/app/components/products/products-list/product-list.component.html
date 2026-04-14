@@ -8,15 +8,63 @@
                     <button class="btn btn-primary mb-3 mr-3" (click)="pendingProductList()">GLB Pending
                         Products</button>
                     <button class="btn btn-primary mb-3" (click)="approvedProductList()">GLB Approved Products</button>
+                    <div class="form-check form-switch mt-3 mb-2">
+                        <input class="form-check-input" type="checkbox" id="platformToggle"
+                            [(ngModel)]="showPlatformProducts" (change)="onPlatformToggleChange()">
+                        <label class="form-check-label" for="platformToggle">
+                            Afficher tous les produits de la plateforme
+                        </label>
+                    </div>
+                    <div *ngIf="userrole === 'admin'" class="table-responsive mb-3">
+                        <h6 class="mb-2">Displayer/Fulfiller en attente</h6>
+                        <div *ngIf="loadingAdminPendingDf" class="text-center py-2">
+                            <span class="spinner-border spinner-border-sm"></span>
+                        </div>
+                        <table class="table table-sm table-bordered" *ngIf="!loadingAdminPendingDf">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Vendor</th>
+                                    <th>Type</th>
+                                    <th>Prix</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let entry of adminPendingDfEntries">
+                                    <td>{{ entry.product_name }}</td>
+                                    <td>{{ entry.vendor_id?.name || '-' }}</td>
+                                    <td>
+                                        <span *ngIf="entry.displayer_status === 'pending'">Displayer </span>
+                                        <span *ngIf="entry.fulfiller_status === 'pending'">Fulfiller</span>
+                                    </td>
+                                    <td>{{ entry.vendor_sales_price || '-' }}</td>
+                                    <td>
+                                        <button *ngIf="entry.displayer_status === 'pending'" class="btn btn-xs btn-success me-1"
+                                            (click)="updateAdminDf(entry, { displayer_status: 'active' })">Approve D</button>
+                                        <button *ngIf="entry.displayer_status === 'pending'" class="btn btn-xs btn-danger me-1"
+                                            (click)="updateAdminDf(entry, { displayer_status: 'inactive' })">Reject D</button>
+                                        <button *ngIf="entry.fulfiller_status === 'pending'" class="btn btn-xs btn-success me-1"
+                                            (click)="updateAdminDf(entry, { fulfiller_status: 'active' })">Approve F</button>
+                                        <button *ngIf="entry.fulfiller_status === 'pending'" class="btn btn-xs btn-danger"
+                                            (click)="updateAdminDf(entry, { fulfiller_status: 'inactive' })">Reject F</button>
+                                    </td>
+                                </tr>
+                                <tr *ngIf="adminPendingDfEntries.length === 0">
+                                    <td colspan="5" class="text-center text-muted">No pending displayer/fulfiller requests</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div id="batchDelete" class="custom-datatable">
                         <div class="table-responsive">
                             <div class="mat-elevation-z8">
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center" *ngIf="!showPlatformProducts">
                                 <input #searchInput class="form-control search" (keyup)="applyFilter($event)" placeholder="Search">
                                 <button class="btn btn-sm btn-secondary ml-2 mb-3" type="button" (click)="clearSearch()">Clear</button>
                                 </div>
 
-                                <table mat-table [dataSource]="dataSource" matSort>
+                                <table mat-table [dataSource]="dataSource" matSort *ngIf="!showPlatformProducts">
 
                                     <ng-container matColumnDef="product_image">
                                         <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Image </th>
@@ -69,6 +117,66 @@
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                                 </table>
+
+                                <div *ngIf="showPlatformProducts" class="table-responsive p-3">
+                                    <div *ngIf="isPlatformLoading" class="text-center py-3">
+                                        <span class="spinner-border spinner-border-sm"></span>
+                                    </div>
+                                    <table class="table table-sm table-hover mb-0" *ngIf="!isPlatformLoading">
+                                        <thead>
+                                            <tr>
+                                                <th>Produit</th>
+                                                <th>Propriétaire</th>
+                                                <th>Je suis Displayer</th>
+                                                <th>Je suis Fulfiller</th>
+                                                <th>Mon prix</th>
+                                                <th>Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of platformProducts" [class.table-warning]="p.df_pending">
+                                                <td>
+                                                    {{ p.product_name }}
+                                                    <span *ngIf="p.is_owner" class="label p-1 label-info ms-1">Owner</span>
+                                                </td>
+                                                <td>{{ p.product_owner?.name || '-' }}</td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-outline-primary"
+                                                        [disabled]="savingPlatformProductId === p._id"
+                                                        (click)="togglePlatformDisplayer(p)">
+                                                        {{ p.vendor_displayer_status === 'none' ? 'Activer' : 'Désactiver' }}
+                                                    </button>
+                                                    <span class="ms-2" [className]="getDfBadgeClass(p.vendor_displayer_status)">
+                                                        {{ p.vendor_displayer_status }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-xs btn-outline-primary"
+                                                        [disabled]="savingPlatformProductId === p._id"
+                                                        (click)="togglePlatformFulfiller(p)">
+                                                        {{ p.vendor_fulfiller_status === 'none' ? 'Activer' : 'Désactiver' }}
+                                                    </button>
+                                                    <span class="ms-2" [className]="getDfBadgeClass(p.vendor_fulfiller_status)">
+                                                        {{ p.vendor_fulfiller_status }}
+                                                    </span>
+                                                </td>
+                                                <td style="max-width: 140px;">
+                                                    <input type="number" class="form-control form-control-sm"
+                                                        [(ngModel)]="p.vendor_sales_price"
+                                                        [disabled]="savingPlatformProductId === p._id"
+                                                        (blur)="savePlatformVendorPrice(p)">
+                                                </td>
+                                                <td>
+                                                    <span *ngIf="p.df_pending" class="label p-1 label-warning">Pending</span>
+                                                    <span *ngIf="!p.df_pending" class="text-muted">-</span>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="platformProducts.length === 0">
+                                                <td colspan="6" class="text-center text-muted">Aucun produit plateforme</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
                                 <mat-paginator [length]="totalProduct" [pageSize]="pageSize" [pageIndex]="currentPage"
                                     [pageSizeOptions]="[5, 10, 20, 50, 100]" (page)="onPageChange($event)"

@@ -37,15 +37,8 @@ export class PlatformMtgListComponent implements OnInit {
     }
 
     addToMyStore(mtg: any) {
-        const vendorId = localStorage.getItem('user_id');
-        if (!vendorId) {
-            this.toastr.error('Vendor ID not found');
-            return;
-        }
-
         this.addingMTGId = mtg._id;
         this.multistoreService.addMTGToVendorStore({
-            vendor_id: vendorId,
             media_text_contain_id: mtg._id
         }).subscribe(
             res => {
