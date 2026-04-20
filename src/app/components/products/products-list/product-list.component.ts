@@ -46,7 +46,9 @@ export class ProductListComponent implements OnInit {
   private lastListAt: number = 0;
   showPlatformProducts = false;
   platformProducts: any[] = [];
+  vendorMTGs: any[] = [];
   isPlatformLoading = false;
+  isVendorMtgLoading = false;
   savingPlatformProductId: string | null = null;
   adminPendingDfEntries: any[] = [];
   loadingAdminPendingDf = false;
@@ -147,6 +149,7 @@ export class ProductListComponent implements OnInit {
     if (this.userrole === 'admin') {
       this.loadAdminPendingDf();
     }
+    this.loadVendorMTGs();
 
     this.vendorType = localStorage.getItem('vendor_type');
     console.log("Vendor Type Of The User::::::::::::::", this.vendorType);
@@ -168,7 +171,10 @@ export class ProductListComponent implements OnInit {
       limit: this.pageSize
     }).subscribe(
       res => {
-        this.platformProducts = res?.data?.products || [];
+        this.platformProducts = (res?.data?.products || []).map((product: any) => ({
+          ...product,
+          vendor_mtg_id: this.normalizeMtgId(product.vendor_mtg_id)
+        }));
         this.totalProduct = res?.data?.totalCount || this.platformProducts.length;
         this.dataSource.data = this.platformProducts.map((p: any) => ({
           ...p,
@@ -182,6 +188,36 @@ export class ProductListComponent implements OnInit {
         this.toastrService.error(error?.error?.message || 'Unable to load platform products');
       }
     );
+  }
+
+  loadVendorMTGs() {
+    this.isVendorMtgLoading = true;
+    this.productservice.getVendorMTGList(1, 500).subscribe(
+      res => {
+        const list = res?.data?.vendorMediaList || [];
+        this.vendorMTGs = list.filter((mtg: any) =>
+          mtg?.status === 'active' && (mtg?.mtg_status === 'active' || !mtg?.mtg_status)
+        );
+        this.isVendorMtgLoading = false;
+      },
+      () => {
+        this.vendorMTGs = [];
+        this.isVendorMtgLoading = false;
+      }
+    );
+  }
+
+  private normalizeMtgId(rawMtgId: any): string | null {
+    if (!rawMtgId) {
+      return null;
+    }
+    if (typeof rawMtgId === 'string') {
+      return rawMtgId;
+    }
+    if (rawMtgId?._id) {
+      return rawMtgId._id;
+    }
+    return null;
   }
 
   getDfBadgeClass(status: string): string {
@@ -221,6 +257,18 @@ export class ProductListComponent implements OnInit {
       return;
     }
     this.savePlatformDf(product, { vendor_sales_price: value });
+  }
+
+  togglePlatformMultiVendorSupport(product: any) {
+    this.savePlatformDf(product, {
+      multi_vendor_support: product.vendor_multi_vendor_support === true
+    });
+  }
+
+  savePlatformMtg(product: any) {
+    this.savePlatformDf(product, {
+      mtg_id: product.vendor_mtg_id || null
+    });
   }
 
   private savePlatformDf(product: any, payload: any) {

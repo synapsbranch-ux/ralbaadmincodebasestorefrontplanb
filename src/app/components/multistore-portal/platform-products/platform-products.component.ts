@@ -9,7 +9,9 @@ import { ToastrService } from 'ngx-toastr';
 export class PlatformProductsComponent implements OnInit {
 
     products: any[] = [];
+    vendorMTGs: any[] = [];
     isLoading = false;
+    isVendorMtgLoading = false;
     currentPage = 1;
     totalPages = 1;
     totalCount = 0;
@@ -23,6 +25,7 @@ export class PlatformProductsComponent implements OnInit {
 
     ngOnInit() {
         this.loadProducts();
+        this.loadVendorMTGs();
     }
 
     loadProducts() {
@@ -32,7 +35,10 @@ export class PlatformProductsComponent implements OnInit {
             limit: this.pageSize
         }).subscribe(
             res => {
-                this.products = res.data?.products || [];
+                this.products = (res.data?.products || []).map((product: any) => ({
+                    ...product,
+                    vendor_mtg_id: this.normalizeMtgId(product.vendor_mtg_id)
+                }));
                 this.totalCount = res.data?.totalCount || 0;
                 this.totalPages = res.data?.totalPages || 1;
                 this.isLoading = false;
@@ -42,6 +48,36 @@ export class PlatformProductsComponent implements OnInit {
                 this.isLoading = false;
             }
         );
+    }
+
+    loadVendorMTGs() {
+        this.isVendorMtgLoading = true;
+        this.multistoreService.getVendorMTGList(1, 500).subscribe(
+            (res) => {
+                const list = res?.data?.vendorMediaList || [];
+                this.vendorMTGs = list.filter((mtg: any) =>
+                    mtg?.status === 'active' && (mtg?.mtg_status === 'active' || !mtg?.mtg_status)
+                );
+                this.isVendorMtgLoading = false;
+            },
+            () => {
+                this.vendorMTGs = [];
+                this.isVendorMtgLoading = false;
+            }
+        );
+    }
+
+    private normalizeMtgId(rawMtgId: any): string | null {
+        if (!rawMtgId) {
+            return null;
+        }
+        if (typeof rawMtgId === 'string') {
+            return rawMtgId;
+        }
+        if (rawMtgId?._id) {
+            return rawMtgId._id;
+        }
+        return null;
     }
 
     toggleDisplayer(product: any) {
@@ -64,6 +100,18 @@ export class PlatformProductsComponent implements OnInit {
             return;
         }
         this.saveDF(product, { vendor_sales_price: product.vendor_sales_price });
+    }
+
+    toggleMultiVendorSupport(product: any) {
+        this.saveDF(product, {
+            multi_vendor_support: product.vendor_multi_vendor_support === true
+        });
+    }
+
+    saveProductMtg(product: any) {
+        this.saveDF(product, {
+            mtg_id: product.vendor_mtg_id || null
+        });
     }
 
     private saveDF(product: any, data: any) {

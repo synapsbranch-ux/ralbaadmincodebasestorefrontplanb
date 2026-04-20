@@ -23,6 +23,8 @@
                                     <th>Displayer</th>
                                     <th>Fulfiller</th>
                                     <th>My Price</th>
+                                    <th>Multi-Vendor Visible</th>
+                                    <th>Vendor MTG</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -65,13 +67,32 @@
                                                (blur)="p.vendor_sales_price ? saveVendorPrice(p) : null">
                                     </td>
                                     <td>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox"
+                                                [(ngModel)]="p.vendor_multi_vendor_support"
+                                                [disabled]="p.is_owner || savingProductId === p._id"
+                                                (change)="toggleMultiVendorSupport(p)">
+                                        </div>
+                                    </td>
+                                    <td style="min-width: 180px;">
+                                        <select class="form-select form-select-sm"
+                                            [(ngModel)]="p.vendor_mtg_id"
+                                            [disabled]="p.is_owner || savingProductId === p._id || isVendorMtgLoading"
+                                            (change)="saveProductMtg(p)">
+                                            <option [ngValue]="null">No MTG</option>
+                                            <option *ngFor="let mtg of vendorMTGs" [ngValue]="mtg._id">
+                                                {{ mtg.heading_text || mtg.description_text || mtg._id }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
                                         <span *ngIf="p.df_pending" class="badge bg-warning text-dark">
                                             Pending Approval
                                         </span>
                                     </td>
                                 </tr>
                                 <tr *ngIf="products.length === 0">
-                                    <td colspan="7" class="text-center text-muted">No products found</td>
+                                    <td colspan="9" class="text-center text-muted">No products found</td>
                                 </tr>
                             </tbody>
                         </table>

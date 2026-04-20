@@ -130,6 +130,8 @@
                                                 <th>Je suis Displayer</th>
                                                 <th>Je suis Fulfiller</th>
                                                 <th>Mon prix</th>
+                                                <th>Multi-Vendor Visible</th>
+                                                <th>Vendor MTG</th>
                                                 <th>Statut</th>
                                             </tr>
                                         </thead>
@@ -167,12 +169,31 @@
                                                         (blur)="savePlatformVendorPrice(p)">
                                                 </td>
                                                 <td>
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            [(ngModel)]="p.vendor_multi_vendor_support"
+                                                            [disabled]="p.is_owner || savingPlatformProductId === p._id"
+                                                            (change)="togglePlatformMultiVendorSupport(p)">
+                                                    </div>
+                                                </td>
+                                                <td style="min-width: 180px;">
+                                                    <select class="form-select form-select-sm"
+                                                        [(ngModel)]="p.vendor_mtg_id"
+                                                        [disabled]="p.is_owner || savingPlatformProductId === p._id || isVendorMtgLoading"
+                                                        (change)="savePlatformMtg(p)">
+                                                        <option [ngValue]="null">No MTG</option>
+                                                        <option *ngFor="let mtg of vendorMTGs" [ngValue]="mtg._id">
+                                                            {{ mtg.heading_text || mtg.description_text || mtg._id }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
                                                     <span *ngIf="p.df_pending" class="label p-1 label-warning">Pending</span>
                                                     <span *ngIf="!p.df_pending" class="text-muted">-</span>
                                                 </td>
                                             </tr>
                                             <tr *ngIf="platformProducts.length === 0">
-                                                <td colspan="6" class="text-center text-muted">Aucun produit plateforme</td>
+                                                <td colspan="8" class="text-center text-muted">Aucun produit plateforme</td>
                                             </tr>
                                         </tbody>
                                     </table>

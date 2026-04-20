@@ -216,6 +216,11 @@ export class ProductService {
     return this.securityService.signedRequest('POST', url, data);
   }
 
+  getVendorMTGList(page: number = 1, limit: number = 500): Observable<any> {
+    const url = environment.baseUrl + `vendor/media-text-content/list?page=${page}&limit=${limit}`;
+    return this.securityService.signedRequest('GET', url);
+  }
+
   updateDisplayerFulfiller(productId: string, data: any): Observable<any> {
     const url = environment.baseUrl + `products/${productId}/displayer-fulfiller`;
     return this.securityService.signedRequest('PATCH', url, data);

@@ -31,6 +31,12 @@ export class MultistorePortalService {
         return this.securityService.signedRequest('POST', url, data);
     }
 
+    /** Vendor's MTG list (for DF mtg_id binding) */
+    getVendorMTGList(page: number = 1, limit: number = 200): Observable<any> {
+        const url = environment.baseUrl + `vendor/media-text-content/list?page=${page}&limit=${limit}`;
+        return this.securityService.signedRequest('GET', url);
+    }
+
     /** Upload MTG image (reuse vendor media-text-content upload) */
     uploadMTGImage(fileToUpload: File): Observable<any> {
         const formData: FormData = new FormData();
